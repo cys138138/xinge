@@ -1,0 +1,49 @@
+<?php
+
+namespace app\{__NAMESPACE__}\controller;
+
+use think\Db;
+
+/**
+ * 控制器
+ * @package app\{__NAMESPACE__}\controller
+ */
+class {__CONTROLLER_NAMW__} extends {__EXTEND_NAME__}
+{
+
+    /**
+     * 默认数据模型
+     * @var string
+     */
+    public $table = '{__TABLE_NAME__}';
+
+    /**
+     * 列表
+     */
+    public function index()
+    {
+        $this->title = '列表';
+        {__CONDITION__}
+    }
+
+    {__ADDFUN__}
+
+    {__EDITORFUN__}
+
+    {__STATUSFUN__}
+    
+    {__DELFUN__}
+
+    /**
+    * 格式化输出
+    * @param type $param
+    */
+   protected function _form_filter(&$param){
+       if (!$this->request->isPost()) {
+        {__EDITORFORMATTER__}
+        
+        {__RELATIONSELECT__}
+        
+        }
+    }
+}

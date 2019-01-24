@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+        <title>{$data.title}</title>
+    </head>
+    <body>   
+
+        <img style="width: 0px;" src="{$data.img_url}">
+        <h1>
+            请点击右上角分享给朋友或者分享到朋友圈！    
+        </h1>
+    </body>
+</html>
+
+<script src="http://cdn.staticfile.org/jquery/3.2.1/jquery.min.js"></script>
+<script src="http://res.wx.qq.com/open/js/jweixin-1.2.0.js"></script>
+<script>
+        $.ajax({
+            url: "{:url('/index/index/getWxSign')}",
+            type: "post",
+            datatype: 'json',
+            data:{
+                url: location.href,
+            },
+            success: function (data) {
+                var aData = data.data;
+                wx.config({
+                    debug: false, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
+                    appId: aData.appId, // 必填，公众号的唯一标识
+                    timestamp: aData.timestamp, // 必填，生成签名的时间戳
+                    nonceStr: aData.nonceStr, // 必填，生成签名的随机串
+                    signature: aData.signature, // 必填，签名，
+                    jsApiList: [
+                        // 所有要调用的 API 都要加到这个列表中
+                        'onMenuShareTimeline',
+                        'onMenuShareAppMessage'
+                    ]
+                });
+            }
+        });
+        wx.ready(function () {
+            //隐藏分享按钮
+            //WeixinJSBridge.call('hideOptionMenu');
+            wx.onMenuShareAppMessage({
+                title: '{$data.title}',
+                desc: '{$data.desc}', // 分享描述
+                link: '{:url("/active/index/share",null,true,true)}?ss_id={$data.id}}',
+                imgUrl: '{$data.img_url}',
+                success: function () {
+                    console.log('设置ok');
+                }
+            });
+            
+            wx.onMenuShareTimeline({ 
+                title: '{$data.title}',
+                desc: '{$data.desc}', 
+                link: '{:url("/index/index/share",null,true,true)}?ss_id={$data.id}', // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
+                imgUrl: '{$data.img_url}', // 分享图标
+                success: function () {
+                  // 设置成功
+                  console.log('设置ok');
+                }
+            });
+        });
+        </script>
