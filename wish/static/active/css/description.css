@@ -1,0 +1,122 @@
+/*-----------------------------------------------------------------
+Name : html5 - description.css
+-----------------------------------------------------------------
+Author: Johwen
+-----------------------------------------------------------------
+CreateTime: 2019-1-7 17:25:06
+-----------------------------------------------------------------
+Description: 
+-----------------------------------------------------------------*/
+body {
+    margin: 0;
+    height: 100%;
+}
+
+*{-webkit-tap-highlight-color:transparent;}
+a:focus,
+input:focus,
+p:focus,
+div:focus{
+    -webkit-tap-highlight-color:transparent;
+}
+
+a{
+    text-decoration: none;
+}
+
+ul{
+    list-style: none;
+    margin:0;
+    padding:0;
+}
+
+.container {
+    background-color: #f7f7f7ee;
+    color: #ff4949;
+    padding-bottom: 12rem;
+    min-height: 100%;
+    background: -webkit-linear-gradient(#fbd98f, #ffedd3);
+    background: -o-linear-gradient(#fbd98f, #ffedd3);
+    background: -moz-linear-gradient(#fbd98f, #ffedd3);
+    background: linear-gradient(#fbd98f, #ffedd3);
+    padding-top: 3rem;
+    position: relative;
+}
+.head-box{
+    width: 100%;
+    height: 3rem;
+    display: flex;
+    justify-content: space-between;
+    background-color: #c20202;
+    position: fixed;
+    top: 0;
+    z-index: 999;
+}
+.head-box .button{
+    width: 3rem;
+    height: 3rem;
+    line-height: 3rem;
+    text-align: center;
+    color: #FFF;
+    font-size: 1.5rem;
+}
+
+.title-box{
+    min-height: 5rem;
+    padding: 2rem 1rem;
+    padding-bottom: 3rem;
+    background-color: #c20102;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    align-items: center;
+    font-size: 1.2rem;
+    clip-path: polygon( 0 0, 100% 0, 100% 100%, 0 85%, 0 0);
+}
+
+.title-box .name{color: #fbd98f;font-size: 1.3rem;}
+
+.title-box .money{font-style: italic;color: #fff7ec;}
+
+.line-view{
+    margin: 0 0 0 .5rem;
+    margin-top: 0.5rem;
+    padding: 1rem;
+    border-bottom: 1px solid #ffc85b;
+    font-size: .8rem;
+}
+
+.line-view:last-child{
+    border: none;
+}
+
+.line-view ul{
+    margin-top:0.5rem;
+}
+
+.line-view ul li{
+    line-height: 1.5rem;
+}
+
+span.title {display: block;text-align: left;}
+
+.foot-box{
+    width: 100%;
+    height: 3rem;
+    line-height: 3rem;
+    background-color: #FFF;
+    position: fixed;
+    bottom: 0;
+    display: flex;
+    justify-content: space-between;
+    border-top: 1px solid #f3f3f3;
+}
+.foot-box .money{
+    padding-left: 1rem;
+}
+.foot-box .button{
+    background-color: #d22222;
+    color: #FFF;
+    padding: 0 2rem;
+}
+

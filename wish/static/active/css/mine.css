@@ -1,0 +1,117 @@
+/*-----------------------------------------------------------------
+Name : html5 - ming.css
+-----------------------------------------------------------------
+Author: Johwen
+-----------------------------------------------------------------
+CreateTime: 2019-1-8 0:00:21
+-----------------------------------------------------------------
+Description: 
+-----------------------------------------------------------------*/
+body {
+    margin: 0;
+    height: 100%;
+}
+
+*{-webkit-tap-highlight-color:transparent;}
+a:focus,
+input:focus,
+p:focus,
+div:focus{
+    -webkit-tap-highlight-color:transparent;
+}
+
+a{
+    text-decoration: none;
+}
+
+ul{
+    list-style: none;
+    margin:0;
+    padding:0;
+}
+
+.container {
+    background-color: #f7f7f7ee;
+}
+
+section.header {
+    background: url(../images/bg_body.jpg);
+    background-size: 100%;
+    background-position: top;
+    padding: 3rem 1rem;
+    display: flex;
+}
+
+section.header center.avatar-box {
+    width: 4rem;
+    height: 4rem;
+    position: relative;
+    overflow: hidden;
+    border-radius: 50%;
+}
+
+section.header center.avatar-box img {
+    width: 100%;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+section.header .column {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    margin-left: .5rem;
+    color: #ffd59a;
+}
+
+section.header .column span.name {}
+
+section.header .column span.id {}
+
+section.header-bottom {
+    display: flex;
+    flex-direction: row;
+}
+
+section.header-bottom a {
+    display: block;
+    flex-grow: 1;
+    line-height: 2.5rem;
+    text-align: center;
+    background-color: #a00f10;
+    color: #ffae3e;
+    font-size: .8rem;
+}
+
+section.header-bottom a:last-child{
+    border-left: 1px solid #900304;
+    margin-left: -1px;
+}
+
+section.menu-box {
+    background-color: #FFF;
+    padding-top: .5rem;
+    margin-top: .5rem;
+}
+
+section.menu-box ul {
+    padding-left: 1rem;
+}
+
+section.menu-box li {
+    padding-right: 1rem;
+    line-height: 2.8rem;
+    font-size: .8rem;
+    border-bottom: 1px solid #efefef;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    color: #666;
+}
+
+section.menu-box li i {
+    font-size: 1rem;
+    color: #bfbebe;
+}

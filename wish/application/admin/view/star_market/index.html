@@ -1,0 +1,190 @@
+{extend name='admin@public/content'}
+
+{block name="button"}
+
+<button class="layui-btn layui-btn-warm" type='button' data-back>返回上一级</button>
+{if auth("$classuri/del")}
+<button data-update data-field='delete' data-action='{:url("$classuri/del")}' class='layui-btn layui-btn-sm layui-btn-danger'>批量删除</button>
+{/if}
+{/block}
+
+{block name="content"}
+<!-- 表单搜索 开始 -->
+<form class="layui-form layui-form-pane form-search" action="{:request()->url()}" onsubmit="return false" method="get">
+
+    <div class="layui-form-item layui-inline">
+        <label class="layui-form-label">时长</label>
+        <div class="layui-input-inline">
+            <input name="time_length" value="{$Think.get.time_length|default=''}" placeholder="请输入时长" class="layui-input">
+        </div>
+    </div>
+    <div class="layui-form-item layui-inline">
+        <label class="layui-form-label">添加时间</label>
+        <div class="layui-input-inline"><input name="create_time" id="create_time" value="{$Think.get.create_time|default=''}" placeholder="请选择添加时间" class="layui-input">
+        </div>
+        <script>window.laydate.render({range: true, elem: "#create_time"});</script>
+    </div>
+
+    <div class="layui-form-item layui-inline">
+        <label class="layui-form-label">更新时间</label>
+        <div class="layui-input-inline"><input name="update_time" id="update_time" value="{$Think.get.update_time|default=''}" placeholder="请选择更新时间" class="layui-input">
+        </div>
+        <script>window.laydate.render({range: true, elem: "#update_time"});</script>
+    </div>
+
+    <div class="layui-form-item layui-inline">
+        <label class="layui-form-label">买卖类型</label>
+        <div class="layui-input-inline">
+            <select name="type" class="layui-select" lay-search="">
+                <option value=""> - 请选择 -</option>
+                <option value="0" {if $Think.get.type eq '0'} selected {/if} > 买方</option>
+                <option value="1" {if $Think.get.type eq '1'} selected {/if} > 卖方</option>
+            </select>
+        </div>
+    </div>
+    
+    <div class="layui-form-item layui-inline">
+        <label class="layui-form-label">买卖状态</label>
+        <div class="layui-input-inline">
+            <select name="status" class="layui-select" lay-search="">
+                <option value=""> - 请选择 -</option>
+                <option value="0" {if $Think.get.status eq '0'} selected {/if} > 进行中</option>
+                <option value="1" {if $Think.get.status eq '1'} selected {/if} > 交易完成</option>
+                <option value="2" {if $Think.get.status eq '2'} selected {/if} > 交易失败</option>
+            </select>
+        </div>
+    </div>
+    
+    <div class="layui-form-item layui-inline">
+        <label class="layui-form-label">取消状态</label>
+        <div class="layui-input-inline">
+            <select name="is_cancel" class="layui-select" lay-search="">
+                <option value=""> - 请选择 -</option>
+                <option value="0" {if $Think.get.is_cancel eq '0'} selected {/if} > 交易中</option>
+                <option value="1" {if $Think.get.is_cancel eq '1'} selected {/if} > 交易取消</option>
+            </select>
+        </div>
+    </div>
+    
+    <div class="layui-form-item layui-inline">
+        <label class="layui-form-label">交易是否完成</label>
+        <div class="layui-input-inline">
+            <select name="is_success" class="layui-select" lay-search="">
+                <option value=""> - 请选择 -</option>
+                <option value="0" {if $Think.get.is_success eq '0'} selected {/if} > 交易进行中</option>
+                <option value="1" {if $Think.get.is_success eq '1'} selected {/if} > 交易完成</option>
+            </select>
+        </div>
+    </div>
+    
+    <div class="layui-form-item layui-inline">
+        <label class="layui-form-label">用户id</label>
+        <div class="layui-input-inline">
+            <input name="uid" value="{$Think.get.uid|default=''}" placeholder="请输入用户id" class="layui-input">
+        </div>
+    </div>
+    
+    <div class="layui-form-item layui-inline">
+        <label class="layui-form-label">成交时间</label>
+        <div class="layui-input-inline"><input name="buy_time" id="buy_time" value="{$Think.get.buy_time|default=''}" placeholder="请选择成交时间" class="layui-input">
+        </div>
+        <script>window.laydate.render({range: true, elem: "#buy_time"});</script>
+    </div>
+
+    <div class="layui-form-item layui-inline">
+        <label class="layui-form-label">取消时间</label>
+        <div class="layui-input-inline"><input name="cancel_time" id="cancel_time" value="{$Think.get.cancel_time|default=''}" placeholder="请选择取消时间" class="layui-input">
+        </div>
+        <script>window.laydate.render({range: true, elem: "#cancel_time"});</script>
+    </div>
+
+    <div class="layui-form-item layui-inline">
+        <button class="layui-btn layui-btn-primary"><i class="layui-icon">&#xe615;</i> 搜 索</button>
+    </div>    
+</form>
+<script>
+    window.form.render();
+</script>
+
+
+<form onsubmit="return false;" data-auto="true" method="post">
+    <!--{if empty($list)}-->
+    <p class="help-block text-center well">没 有 记 录 哦！</p>
+    <!--{else}-->
+    <input type="hidden" value="resort" name="action">
+    <table class="layui-table" lay-skin="line">
+        <thead>
+            <tr>
+                <th class='list-table-check-td'>
+                    <input data-auto-none="" data-check-target='.list-check-box' type='checkbox'>
+                </th>
+                <th class='text-left'>编号</th>
+                <th class='text-left'>所属艺人</th>
+                <th class='text-left'>时长</th>
+                
+                <th class='text-left'>添加时间</th>
+                <th class='text-left'>更新时间</th>
+                <th class='text-left'>类型 0 买入 1 卖</th>
+                <th class='text-left'>买卖状态</th>
+                <th class='text-left'>是否取消</th>
+                <th class='text-left'>交易是否完成</th>
+                <th class='text-left'>app用户</th>
+                <th class='text-left'>成交时间</th>
+                <th class='text-left'>取消时间</th>
+
+                <th class='text-center'>操作</th>
+            </tr>
+        </thead>
+        <tbody>
+            {foreach $list as $key=>$vo}
+            <tr>
+                <td class='list-table-check-td'>
+                    <input class="list-check-box" value='{$vo.id}' type='checkbox'>
+                </td>
+
+                <td class='text-left'>{$vo.id}</td>
+                 <td class='text-left'>{$vo.star_name}</td>
+                <td class='text-left'>{$vo.time_length}</td>               
+                <td class='text-left nowrap'>
+                    {$vo.create_time|format_datetime|default="<span class='color-desc'>--</span>"|raw}
+                </td> <td class='text-left nowrap'>
+                    {$vo.update_time|format_datetime|default="<span class='color-desc'>--</span>"|raw}
+                </td>
+                
+                <td class='text-left'>
+                    {if $vo.type eq 0}<span style="color: #a6e1ec">买方</span>
+                    {elseif $vo.type eq 1}<span  style="color: green">卖方</span>                  
+                    {/if}
+                
+                </td>
+                <td class='text-left'>
+                        {if $vo.status eq 0}<span style="color: #a6e1ec">进行中</span>
+                        {elseif $vo.type eq 1}<span  style="color: green">交易成功</span>                  
+                        {elseif $vo.type eq 2}<span  style="color: green">交易失败</span>                  
+                        {/if}
+                </td>
+                <td class='text-left'>{$vo.is_cancel}</td>
+                <td class='text-left'>{$vo.is_success}</td>
+                <td class='text-left'>{$vo.user_name}</td>
+                <td class='text-left nowrap'>
+                    {$vo.buy_time|format_datetime|default="<span class='color-desc'>--</span>"|raw}
+                </td> <td class='text-left nowrap'>
+                    {$vo.cancel_time|format_datetime|default="<span class='color-desc'>--</span>"|raw}
+                </td>            
+                <td class='text-center nowrap'>
+
+
+
+                    {if auth("$classuri/del")}
+                    <span class="text-explode">|</span>
+                    <a data-update="{$vo.id}" data-field='delete' data-action='{:url("$classuri/del")}'>删除</a>
+                    {/if}
+                </td>
+            </tr>
+            {/foreach}
+        </tbody>
+    </table>
+    {if isset($page)}<p>{$page|raw}</p>{/if}
+    <!--{/if}-->
+</form>
+{/block}

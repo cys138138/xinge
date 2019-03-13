@@ -1,0 +1,169 @@
+{extend name='admin@public/content'}
+
+{block name="button"}
+
+    {if auth("$classuri/shareauth")}
+        <button data-update data-field='is_have_share_auth' data-action='{:url("$classuri/shareauth")}' data-value="1" class='layui-btn layui-btn-sm layui-btn-danger'>批量设置分享权限</button>
+    {/if}
+    {if auth("$classuri/shareauth")}
+    <button data-update data-field='is_have_share_auth' data-action='{:url("$classuri/shareauth")}'  data-value="0" class='layui-btn layui-btn-sm layui-btn-danger'>批量删除分享权限</button>
+    {/if}
+{/block}
+
+{/block}
+
+{block name="content"}
+<!-- 表单搜索 开始 -->
+<form class="layui-form layui-form-pane form-search" action="{:request()->url()}" onsubmit="return false" method="get">
+
+    <div class="layui-form-item layui-inline">
+        <label class="layui-form-label">手机</label>
+        <div class="layui-input-inline">
+            <input name="mobile" value="{$Think.get.mobile|default=''}" placeholder="请输入手机" class="layui-input">
+        </div>
+    </div>
+    <div class="layui-form-item layui-inline">
+        <label class="layui-form-label">用户呢称</label>
+        <div class="layui-input-inline">
+            <input name="uname" value="{$Think.get.uname|default=''}" placeholder="请输入用户呢称" class="layui-input">
+        </div>
+    </div>
+    <div class="layui-form-item layui-inline">
+        <label class="layui-form-label">真实姓名</label>
+        <div class="layui-input-inline">
+            <input name="true_name" value="{$Think.get.true_name|default=''}" placeholder="请输入真实姓名" class="layui-input">
+        </div>
+    </div>
+    <div class="layui-form-item layui-inline">
+        <label class="layui-form-label">身份证号码</label>
+        <div class="layui-input-inline">
+            <input name="idno" value="{$Think.get.idno|default=''}" placeholder="请输入身份证号码" class="layui-input">
+        </div>
+    </div>
+    
+    <div class="layui-form-item layui-inline">
+        <label class="layui-form-label">状态</label>
+        <div class="layui-input-inline">
+            <select name="status" class="layui-select" lay-search="">
+                <option value=""> - 请选择 -</option>
+                <option value="0" {if $Think.get.status eq '0'} selected {/if} > 未激活</option>
+                <option value="1" {if $Think.get.status eq '1'} selected {/if} > 正常</option>
+                <option value="2" {if $Think.get.status eq '2'} selected {/if} > 禁用</option>
+            </select>
+        </div>
+    </div>
+    <div class="layui-form-item layui-inline">
+        <label class="layui-form-label">分享二维码权限</label>
+        <div class="layui-input-inline">
+            <select name="is_have_share_auth" class="layui-select" lay-search="">
+                <option value=""> - 请选择 -</option>
+                <option value="0" {if $Think.get.is_have_share_auth eq '0'} selected {/if} > 没权限</option>
+                <option value="1" {if $Think.get.is_have_share_auth eq '1'} selected {/if} > 有权限</option>
+            </select>
+        </div>
+    </div>
+    
+    <div class="layui-form-item layui-inline">
+        <label class="layui-form-label">加入时间</label>
+        <div class="layui-input-inline">
+            <input id="createtime" name="createtime" value="{$Think.get.createtime|default=''}" placeholder="请选择时间段" class="layui-input">
+             <script>window.laydate.render({range: true, elem: "#createtime"});</script>
+        </div>
+    </div>
+    <div class="layui-form-item layui-inline">
+        <label class="layui-form-label">账户余额</label>
+        <div class="layui-input-inline">
+            <input name="money" value="{$Think.get.money|default=''}" placeholder="请输入账户余额" class="layui-input">
+        </div>
+    </div>
+    <div class="layui-form-item layui-inline">
+        <label class="layui-form-label">上级（推荐人id）</label>
+        <div class="layui-input-inline">
+            <input name="pid" value="{$Think.get.pid|default=''}" placeholder="请输入上级id" class="layui-input">
+        </div>
+    </div>
+    <div class="layui-form-item layui-inline">
+        <button class="layui-btn layui-btn-primary"><i class="layui-icon">&#xe615;</i> 搜 索</button>
+    </div>    
+</form>
+<script>
+    window.form.render();
+</script>
+
+
+<form onsubmit="return false;" data-auto="true" method="post">
+    <!--{if empty($list)}-->
+    <p class="help-block text-center well">没 有 记 录 哦！</p>
+    <!--{else}-->
+    <input type="hidden" value="resort" name="action">
+    <table class="layui-table" lay-skin="line">
+        <thead>
+            <tr>
+                <th class='list-table-check-td'>
+                    <input data-auto-none="" data-check-target='.list-check-box' type='checkbox'>
+                </th>
+                <th class='text-left'>id</th>
+                <th class='text-left'>呢称</th>
+                <th class='text-left'>真实姓名</th>
+                <th class='text-left'>身份证</th>
+                <th class='text-left'>手机</th>
+                <th class='text-left'>状态</th>
+                <th class='text-left'>分享权限</th>
+                <th class='text-left'>加入时间</th>
+                <th class='text-left'>账户余额</th>
+                <th class='text-left'>上级（推荐人id）</th>
+
+                <th class='text-center'>操作</th>
+            </tr>
+        </thead>
+        <tbody>
+            {foreach $list as $key=>$vo}
+            <tr>
+                <td class='list-table-check-td'>
+                    <input class="list-check-box" value='{$vo.id}' type='checkbox'>
+                </td>
+
+                <td class='text-left'>{$vo.id}</td>
+                <td class='text-left'>{$vo.open_nickname}</td>
+                <td class='text-left'>{$vo.id_true_name}</td>
+                <td class='text-left'>{$vo.id_no}</td>
+                <td class='text-left'>{$vo.mobile}</td>
+                <td class='text-center'>
+                    {if $vo.status eq 0}<span>未激活</span>
+                    {elseif $vo.status eq 1}<span class="color-green">使用中</span>
+                    {elseif $vo.status eq 2}<span class="color-red">禁用</span>
+                    
+                    {/if}
+                </td>
+                <td class='text-center'>
+                    {if $vo.is_have_share_auth eq 0}<span>无</span>
+                    {elseif $vo.is_have_share_auth eq 1}<span class="color-green">有</span>
+                    
+                    {/if}
+                </td>
+                
+                <td class='text-left'>{$vo.createtime|format_datetime|default="<span class='color-desc'>--</span>"|raw}</td>
+                
+                <td class='text-left'>{$vo.money}</td>
+                <td class='text-left'>{$vo.pid}</td>
+
+                <td class='text-center nowrap'>
+
+
+                    {if $vo.status eq 1 and auth("$classuri/forbid")}
+                    <span class="text-explode">|</span>
+                    <a data-update="{$vo.id}" data-field='status' data-value='2' data-action='{:url("$classuri/forbid")}'>禁用</a>
+                    {elseif auth("$classuri/resume")}
+                    <span class="text-explode">|</span>
+                    <a data-update="{$vo.id}" data-field='status' data-value='1' data-action='{:url("$classuri/resume")}'>启用</a>
+                    {/if}
+
+                </td>
+            </tr>
+            {/foreach}
+        </tbody>
+    </table>
+    {if isset($page)}<p>{$page|raw}</p>{/if}
+    <!--{/if}-->
+</form>
+{/block}

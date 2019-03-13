@@ -1,0 +1,280 @@
+/*-----------------------------------------------------------------
+Name : html5 - finance.css
+-----------------------------------------------------------------
+Author: Johwen
+-----------------------------------------------------------------
+CreateTime: 2019-1-8 2:46:45
+-----------------------------------------------------------------
+Description: 
+-----------------------------------------------------------------*/
+body {
+    margin: 0;
+    height: 100%;
+}
+
+*{-webkit-tap-highlight-color:transparent;}
+a:focus,
+input:focus,
+p:focus,
+div:focus{
+    -webkit-tap-highlight-color:transparent;
+}
+
+a{
+    text-decoration: none;
+}
+
+ul{
+    list-style: none;
+    margin:0;
+    padding:0;
+}
+
+.container {
+    padding-top: 3rem;
+}
+
+.head-box{
+    width: 100%;
+    height: 3rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #c20202;
+    position: fixed;
+    top: 0;
+    z-index: 999;
+}
+.head-box a{
+    color: #ffffff;
+    font-size: .8rem;
+    padding-left: .8rem;
+}
+.head-box .button{
+    width: 3rem;
+    height: 3rem;
+    line-height: 3rem;
+    text-align: center;
+    color: #FFF;
+    font-size: 1.5rem;
+}
+.head-box .head-title{
+    font-size: .9rem;
+    color: #ffcc86;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+section.content {
+    margin: 1rem 1rem;
+    background-color: #fdfdfd;
+    border: 0px solid #c20102;
+    border-radius: 3px;
+    padding-bottom: 1rem;
+}
+
+section.content .bank_select {
+    height: 3rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: .8rem;
+    background-color: #fbfbfb;
+    box-shadow: 0 -1px 16px #f5f4f4 inset;
+}
+
+section.content .bank_select .row {
+    display: flex;
+    flex-direction: row;
+}
+
+section.content .bank_select .row img {
+    max-width: 3rem;
+    height: 3rem;
+}
+
+section.content .bank_select .row .column {
+    display: flex;
+    flex-direction: column;
+    margin-left: .5rem;
+    justify-content: space-around;
+}
+
+section.content .bank_select .row .column span.name {font-size: .8rem;}
+
+section.content .bank_select .row .column span.tips {
+    font-size: .6rem;
+    color: #666;
+}
+
+section.content .bank_select i {
+    font-size: 2rem;
+    color: #dcdcdc;
+}
+
+section.content .opt-box {
+    padding: 1rem 1.2rem;
+}
+
+section.content .opt-box span.t0 {
+    width: 100%;
+    display: block;
+    font-size: .8rem;
+}
+
+section.content .opt-box input {
+    display: block;
+    font-size: 1.5rem;
+    border: none;
+    height: 3rem;
+    line-height: 3rem;
+    outline: none;
+    padding: .5rem 0;
+    flex-grow: 1;
+    background-color: transparent;
+}
+section.content .opt-box .input{
+    position: relative;
+    display: flex;
+    margin: 1rem 0;
+    align-items: center;
+    border-bottom: 1px solid #CCC;
+    box-sizing: border-box;
+    -moz-box-sizing:border-box; /* Firefox */
+    -webkit-box-sizing:border-box;
+}
+
+section.content .opt-box .input::before{
+    content: "\f157";
+    font: normal normal normal 14px/1 FontAwesome;
+    font-size: 2rem;
+    width: 2rem;
+    height: 3rem;
+    line-height: 3rem;
+    text-align: center;
+    display: block;
+}
+
+section.content .opt-box span.sub-t0 {
+    display: block;
+    font-size: .8rem;
+    line-height: 2.5rem;
+    color: #999;
+}
+
+section.content .opt-box span.sub-t0 em{
+    font-style: normal;
+}
+
+section.content .opt-box span.sub-t0 a {
+    font-weight: 300;
+    color: #f99041;
+}
+
+section.content .opt-box button {
+    width: 100%;
+    display: block;
+    text-align: center;
+    line-height: 2.5rem;
+    background-color: #c20102;
+    color: #FFF;
+    border-radius: 8px;
+    border: none;
+    font-size: .8rem;
+    margin-top: .5rem;
+    outline: none;
+}
+.bottom-sheet{
+    width: 100%;
+    height: 100%;
+    display: none;
+    position: absolute;
+    top: 0;
+    left: 0;
+    overflow: hidden;
+    background-color: #00000030;
+    z-index: 999;
+}
+
+section.bank-list {
+    background-color: #FFF;
+    border-top: 1px solid #f5f4f4;
+    min-height: 50%;
+    position: absolute;
+    width: 100%;
+    bottom: -50%;
+}
+
+section.bank-list ul {}
+
+section.bank-list ul li{
+    border-bottom: 1px solid #f7f7f7;
+}
+
+section.bank-list ul li.title {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: .8rem;
+}
+section.bank-list ul li.title i{
+    position: absolute;
+    left: .5rem;
+    width: 1rem;
+    height: 1rem;
+    line-height: 1rem;
+    text-align: center;
+    font-weight: 100;
+    color: #666;
+}
+section.bank-list ul li.title span.mian-title {
+    font-size: 1rem;
+}
+
+section.bank-list ul li.title span.sub-title {
+    font-size: .6rem;
+    color: #999;
+    font-weight: 300;
+    line-height: 1.5rem;
+}
+
+section.bank-list ul li.li {
+    display: flex;
+    padding: .8rem;
+    align-items: center;
+}
+
+section.bank-list ul li.li img {
+    width: 2rem;
+    height: 2rem;
+}
+
+section.bank-list ul li.li .column {
+    display: flex;
+    flex-direction: column;
+    margin-left: .5rem;
+    justify-content: space-around;
+}
+
+section.bank-list ul li.li .column span.name {
+    font-size: .8rem;
+}
+
+section.bank-list ul li.li .column span.sub-tips {
+    font-size: .6rem;
+}
+
+section.bank-list ul li.bottom {
+    height: 2rem;
+    line-height: 2rem;
+    padding: .8rem;
+    padding-left: 3.3rem;
+}
+
+section.bank-list ul li.bottom a {
+    color: #333;
+    display: block;
+    width: 100%;
+    height: 100%;
+}

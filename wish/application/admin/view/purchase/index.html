@@ -1,0 +1,145 @@
+{extend name='admin@public/content'}
+
+{block name="button"}
+
+
+
+{/block}
+
+{block name="content"}
+<!-- 表单搜索 开始 -->
+<form class="layui-form layui-form-pane form-search" action="{:request()->url()}" onsubmit="return false" method="get">
+
+    <div class="layui-form-item layui-inline">
+        <label class="layui-form-label">所属艺人</label>
+        <div class="layui-input-inline">
+            <input name="star_name" value="{$Think.get.star_name|default=''}" placeholder="请输入艺人姓名" class="layui-input">
+        </div>
+    </div>
+    <div class="layui-form-item layui-inline">
+        <label class="layui-form-label">申购用户</label>
+        <div class="layui-input-inline">
+            <input name="uname" value="{$Think.get.uname|default=''}" placeholder="请输入申购用户呢称" class="layui-input">
+        </div>
+    </div>
+    
+    <div class="layui-form-item layui-inline">
+        <label class="layui-form-label">状态</label>
+        <div class="layui-input-inline">
+            <select name="status" class="layui-select" lay-search="">
+                <option value=""> - 请选择 -</option>
+                <option value="0" {if $Think.get.status eq '0'} selected {/if} > 申购中</option>
+                <option value="1" {if $Think.get.status eq '1'} selected {/if} > 系统已处理</option>
+                <option value="2" {if $Think.get.status eq '2'} selected {/if} > 系统已取消</option>
+            </select>
+        </div>
+    </div>
+    
+    <div class="layui-form-item layui-inline">
+        <label class="layui-form-label">处理时间</label>
+        <div class="layui-input-inline"><input name="opt_time" id="opt_time" value="{$Think.get.opt_time|default=''}" placeholder="请选择处理时间" class="layui-input">
+        </div>
+        <script>window.laydate.render({range: true, elem: "#opt_time"});</script>
+    </div>
+
+    <div class="layui-form-item layui-inline">
+        <label class="layui-form-label">申购时间</label>
+        <div class="layui-input-inline"><input name="create_time" id="create_time" value="{$Think.get.create_time|default=''}" placeholder="请选择申购时间" class="layui-input">
+        </div>
+        <script>window.laydate.render({range: true, elem: "#create_time"});</script>
+    </div>
+
+    <div class="layui-form-item layui-inline">
+        <label class="layui-form-label">申购单价</label>
+        <div class="layui-input-inline">
+            <input name="one_price" value="{$Think.get.one_price|default=''}" placeholder="请输入申购单价" class="layui-input">
+        </div>
+    </div>
+    <div class="layui-form-item layui-inline">
+        <label class="layui-form-label">总共花费</label>
+        <div class="layui-input-inline">
+            <input name="money" value="{$Think.get.money|default=''}" placeholder="请输入总共花费" class="layui-input">
+        </div>
+    </div>
+    <div class="layui-form-item layui-inline">
+        <label class="layui-form-label">除去手续费总费用</label>
+        <div class="layui-input-inline">
+            <input name="real_money" value="{$Think.get.real_money|default=''}" placeholder="请输入除去手续费总费用" class="layui-input">
+        </div>
+    </div>
+    <div class="layui-form-item layui-inline">
+        <button class="layui-btn layui-btn-primary"><i class="layui-icon">&#xe615;</i> 搜 索</button>
+    </div>    
+</form>
+<script>
+    window.form.render();
+</script>
+
+
+<form onsubmit="return false;" data-auto="true" method="post">
+    <!--{if empty($list)}-->
+    <p class="help-block text-center well">没 有 记 录 哦！</p>
+    <!--{else}-->
+    <input type="hidden" value="resort" name="action">
+    <table class="layui-table" lay-skin="line">
+        <thead>
+            <tr>
+                <th class='list-table-check-td'>
+                    <input data-auto-none="" data-check-target='.list-check-box' type='checkbox'>
+                </th>
+                <th class='text-left'>所属艺人</th>
+                <th class='text-left'>申购用户</th>
+                <th class='text-left'>状态</th>
+                <th class='text-left'>数量</th>
+                <th class='text-left'>处理时间</th>
+                <th class='text-left'>申购时间</th>
+                <th class='text-left'>申购单价</th>
+                <th class='text-left'>总共花费</th>
+                <th class='text-left'>除去手续费总费用</th>
+                <th class='text-left'>平台手续费</th>
+                <th class='text-left'>系统取消时间</th>
+
+                <th class='text-center'>操作</th>
+            </tr>
+        </thead>
+        <tbody>
+            {foreach $list as $key=>$vo}
+            <tr>
+                <td class='list-table-check-td'>
+                    <input class="list-check-box" value='{$vo.id}' type='checkbox'>
+                </td>
+
+                <td class='text-left'>{$vo.star_name}</td>
+                <td class='text-left'>{$vo.open_nickname}</td>
+                <td class='text-left'>
+                     {if $vo.status eq 0}<span style="color: #a6e1ec">申购中</span>
+                    {elseif $vo.status eq 1}<span  style="color: green">系统分配完成</span>               
+                    {elseif $vo.status eq 2}<span  style="color: green">取消申购</span>               
+                    {/if}
+                </td>
+                
+                <td class='text-left'>{$vo.buy_nums}</td>
+                <td class='text-left nowrap'>
+                    {$vo.opt_time|format_datetime|default="<span class='color-desc'>--</span>"|raw}
+                </td> <td class='text-left nowrap'>
+                    {$vo.create_time|format_datetime|default="<span class='color-desc'>--</span>"|raw}
+                </td><td class='text-left'>{$vo.one_price}</td>
+                <td class='text-left'>{$vo.money}</td>
+                <td class='text-left'>{$vo.real_money}</td>
+                <td class='text-left'>{$vo.platform_commission}</td>
+                <td class='text-left nowrap'>
+                    {$vo.cancel_time|format_datetime|default="<span class='color-desc'>--</span>"|raw}
+                </td>            
+                <td class='text-center nowrap'>
+
+
+
+                </td>
+            </tr>
+            {/foreach}
+        </tbody>
+    </table>
+    {if isset($page)}<p>{$page|raw}</p>{/if}
+    <!--{/if}-->
+</form>
+{/block}

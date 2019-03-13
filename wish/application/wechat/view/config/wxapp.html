@@ -1,0 +1,88 @@
+{extend name="admin@public/content"}
+
+{block name="content"}
+<form onsubmit="return false;" action="{:request()->url()}" data-auto="true" method="post" class='form-horizontal layui-form padding-top-20'>
+
+
+    <div data-api-type="api" >
+        <div class="row form-group">
+            <label class="col-sm-2 control-label">Token<br><span class="nowrap color-desc">验证令牌</span></label>
+            <div class="col-sm-8">
+                <input type="text" name="wechat_app_token" required="required" title="请输入接口Token(令牌)" placeholder="Token（令牌）" value="{:sysconf('wechat_app_token')}" class="layui-input">
+                <p class="help-block">小程序平台与系统对接认证Token，请优先填写此参数并保存，然后再在微信小程序平台操作对接。</p>
+            </div>
+        </div>
+        <div class="row form-group">
+            <label class="col-sm-2 control-label">AppId<br><span class="nowrap color-desc">小程序标识</span></label>
+            <div class="col-sm-8">
+                <input type="text" name="wechat_app_appid" title="请输入以wx开头的18位小程序APPID" placeholder="小程序APPID（必填）" pattern="^wx[0-9a-z]{16}$" maxlength="18" required="required" value="{:sysconf('wechat_app_appid')}" class="layui-input">
+                <p class="help-block">小程序应用ID是所有接口必要参数，可以在小程序平台 [ 开发 > 基本配置 ] 页面获取。</p>
+            </div>
+        </div>
+        <div class="row form-group">
+            <label class="col-sm-2 control-label">AppSecret<br><span class="nowrap color-desc">小程序密钥</span></label>
+            <div class="col-sm-8">
+                <input type="text" name="wechat_app_appsecret" required="required" title="请输入32位小程序AppSecret" placeholder="小程序AppSecret（必填）" value="{:sysconf('wechat_app_appsecret')}" maxlength="32" pattern="^[0-9a-z]{32}$" class="layui-input">
+                <p class="help-block">小程序应用密钥是所有接口必要参数，可以在小程序平台 [ 开发 > 基本配置 ] 页面授权后获取。</p>
+            </div>
+        </div>
+        <div class="row form-group">
+            <label class="col-sm-2 control-label">EncodingAESKey<br><span class="nowrap color-desc">消息加密密钥</span></label>
+            <div class="col-sm-8">
+                <input type="text" name="wechat_app_encodingaeskey" title="请输入43位消息加密密钥" placeholder="消息加密密钥，若开启了消息加密时必需填写（可选）" value="{:sysconf('wechat_app_encodingaeskey')}" maxlength="43" class="layui-input">
+                <p class="help-block">小程序平台接口设置为加密模式，消息加密密钥必需填写并保持与小程序平台一致。</p>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-2 control-label">AppUri<br><span class="nowrap color-desc">消息推送接口</span></label>
+            <div class='col-sm-8'>
+                <input type="text" name="wechat_appurl" required value="{:url('@api/customer/notify','',true,true)}" title="请输入小程序接口通知URL" placeholder="小程序接口通知URL（必填）" class="layui-input layui-bg-gray">
+                <p class="help-block">小程序服务平台接口通知URL, 小程序消息接收与回复等。</p>
+            </div>
+        </div>
+        
+        <div class="hr-line-dashed"></div>
+        <div class="form-group">
+            <label class="col-sm-2 control-label">支付mch_id</label>
+            <div class='col-sm-8'>
+                <input type="text" name="wechat_mch_id" required value="{:sysconf('wechat_mch_id')}" title="请输入支付wechat_mch_id" placeholder="请输入支付wechat_mch_id" class="layui-input layui-bg-gray">
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-2 control-label">支付partnerkey</label>
+            <div class='col-sm-8'>
+                <input type="text" name="wechat_partnerkey" required value="{:sysconf('wechat_partnerkey')}" title="请输入支付wechat_partnerkey" placeholder="请输入支付wechat_partnerkey" class="layui-input layui-bg-gray">
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-2 control-label">支付cert</label>
+            <div class='col-sm-8'>
+                <input type="text" name="wechat_cert_cert" required value="{:sysconf('wechat_cert_cert')}" title="请输入支付wechat_cert_cert" placeholder="请输入支付wechat_cert_cert" class="layui-input layui-bg-gray">
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-2 control-label">支付cert_key</label>
+            <div class='col-sm-8'>
+                <input type="text" name="wechat_cert_key" required value="{:sysconf('wechat_cert_key')}" title="请输入支付wechat_cert_key" placeholder="请输入支付wechat_cert_key" class="layui-input layui-bg-gray">
+            </div>
+        </div>
+        <div class="hr-line-dashed"></div>
+    </div>
+
+
+    
+    <div class="col-sm-6 col-sm-offset-2">
+        <div class="layui-form-item text-center">
+            <button class="layui-btn" type="submit">保存配置</button>
+        </div>
+    </div>
+
+</form>
+
+<script>
+    $(function () {
+
+    });
+</script>
+
+{/block}

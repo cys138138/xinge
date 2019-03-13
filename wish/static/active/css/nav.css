@@ -1,0 +1,54 @@
+/*-----------------------------------------------------------------
+Name : html5 - nav.css
+-----------------------------------------------------------------
+Author: Johwen
+-----------------------------------------------------------------
+CreateTime: 2019-1-10 20:19:49
+-----------------------------------------------------------------
+Description: 
+-----------------------------------------------------------------*/
+body{
+    padding-bottom: 4rem;
+}
+.nav-box{
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    padding: .5rem 0;
+    background-color: #d40e0f;
+    border-top: 1px solid #c50506;
+    box-shadow: 0 -5px 15px #c20102 inset;
+}
+.nav-box ul{
+    list-style: none;
+    display: flex;
+    justify-content: space-around;
+    margin: 0;
+    padding: 0;
+}
+.nav-box ul li{
+    flex-grow: 1;
+    text-align: center;
+}
+.nav-box ul li a{
+    display: flex;
+    width: 100%;
+    height: 100%;
+    flex-direction: column;
+    align-items: center;
+    color: #FFF;
+}
+.nav-box ul li a.active{
+    color: #ffd271;
+}
+.nav-box ul li a span{
+    
+}
+.nav-box ul li a span.icon{
+    font-size: 1.5rem;
+}
+.nav-box ul li a span.name{
+    line-height: 1.5rem;
+    font-size: .8rem;
+}
+

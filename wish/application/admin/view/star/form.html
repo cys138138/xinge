@@ -1,0 +1,291 @@
+
+{extend name="admin@public/content"}
+
+{block name="content"}
+<form onsubmit="return false;" action="{:request()->url()}" data-auto="true" method="post" class='form-horizontal layui-form padding-top-20'>
+    
+        <div class="hr-line-dashed"></div>    
+    <div class="form-group">
+        <label class="col-sm-2 control-label">
+            进行状态
+        </label>
+        <div class="col-sm-8">
+            <label class="think-radio">
+                <input type="radio" name="type" value="0" {if !isset($vo['type'])}checked{/if} {if isset($vo['type']) and $vo['type'] eq 0}checked{/if} lay-ignore="">
+                  预售
+            </label>
+            <label class="think-radio">
+                <input type="radio" name="type" value="1" {if isset($vo['type']) and $vo['type'] eq 1}checked{/if} lay-ignore="">
+                    申购
+            </label>
+            <label class="think-radio">
+                <input type="radio" name="type" value="2" {if isset($vo['type']) and $vo['type'] eq 2}checked{/if} lay-ignore="">
+                    入市
+            </label>
+            <label class="think-radio">
+                <input type="radio" name="type" value="3" {if isset($vo['type']) and $vo['type'] eq 3}checked{/if} lay-ignore="">
+                    结束
+            </label>
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="col-sm-2 control-label">
+            姓名
+        </label>
+        <div class="col-sm-8">
+            <input name="name" required="required" title="请输入姓名" placeholder="请输入姓名" value='{$vo.name|default=""}' class="layui-input">
+        </div>
+    </div>
+        
+    <div class="form-group">
+        <label class="col-sm-2 control-label">
+            国籍
+        </label>
+        <div class="col-sm-8">
+            <input name="country" title="请输入国籍" placeholder="请输入国籍" value='{$vo.country|default=""}' class="layui-input">
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="col-sm-2 control-label">
+            名族
+        </label>
+        <div class="col-sm-8">
+            <input name="ethnic"  title="请输入名族" placeholder="请输入名族" value='{$vo.ethnic|default=""}' class="layui-input">
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="col-sm-2 control-label">
+            星座
+        </label>
+        <div class="col-sm-8">
+            <input name="constellation"  title="请输入名族" placeholder="请输入名族" value='{$vo.constellation|default=""}' class="layui-input">
+        </div>
+    </div>
+        
+    <div class="form-group">
+        <label class="col-sm-2 control-label">
+            出生日期
+        </label>
+        <div class="col-sm-8">
+            <input name="birthday"  title="请输入出生日期" placeholder="请输入出生日期" value='{$vo.birthday|default=""}' class="layui-input">
+            <p class="help-block">如1994-01-01</p>
+        </div>
+    </div>
+        
+    <div class="form-group">
+        <label class="col-sm-2 control-label">
+            毕业学校
+        </label>
+        <div class="col-sm-8">
+            <input name="school" title="请输入毕业学校" placeholder="请输入毕业学校" value='{$vo.school|default=""}' class="layui-input">
+        </div>
+    </div>
+        
+    <div class="form-group">
+        <label class="col-sm-2 control-label">
+            所在城市
+        </label>
+        <div class="col-sm-8">
+            <input name="city" title="请输入所在城市" placeholder="请输入所在城市" value='{$vo.city|default=""}' class="layui-input">
+        </div>
+    </div>
+        
+        
+    <div class="hr-line-dashed"></div><div class="form-group">
+        <label class="col-sm-2 control-label">
+            代号
+        </label>
+        <div class="col-sm-8">
+            <input name="code"  required="required" title="请输入代号" placeholder="请输入代号" value='{$vo.code|default="$code"}' class="layui-input">
+            <p class="help-block">代号自动计算code</p>
+        </div>
+    </div>
+    <div class="hr-line-dashed"></div><div class="form-group">
+        <label class="col-sm-2 control-label">
+            总共时长
+        </label>
+        <div class="col-sm-8">
+            <input name="time_length"  required="required" title="请输入代号" placeholder="请输入代号" value='{$vo.time_length|default="0"}' class="layui-input">
+            <p class="help-block">可申购总共时长单位秒</p>
+        </div>
+    </div>
+    <div class="hr-line-dashed"></div><div class="form-group">
+        <label class="col-sm-2 control-label">
+            职业
+        </label>
+        <div class="col-sm-8">
+            <input name="identity" required="required" title="请输入职业" placeholder="请输入职业" value='{$vo.identity|default=""}' class="layui-input">
+            <p class="help-block">如（演员）</p>
+        </div>
+    </div>
+    
+    <div class="hr-line-dashed"></div>        
+    <div class="form-group">
+        <label class="col-sm-2 control-label label-required">图册</label>
+        <div class='col-sm-8'>
+            <table class="layui-table background-item margin-none" lay-size="sm" lay-skin="nob">
+                <thead>
+                <tr>
+                    <td>封面图</td>
+                    <td>申购封面图</td>
+                    <td>介绍图片</td>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <td class="text-top" style="width:100px">
+                        <input type="hidden" name="thumb_img" value="{$vo.thumb_img|default=''}">
+                    </td>
+                    <td class="text-top" style="width:100px">
+                        <input type="hidden" name="purchase_img" value="{$vo.purchase_img|default=''}">
+                    </td>
+                    <td class="text-top">
+                        <input type="hidden" name="intro_img" value="{$vo.intro_img|default=''}">
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    
+    
+    
+    
+    <div class="hr-line-dashed"></div>        
+    <div class="form-group">
+        <label class="col-sm-2 control-label">
+            个人成就
+        </label>
+        <div class="col-sm-8">
+            <textarea name='intro'>{$vo.intro|default=""}</textarea>                
+            <p class="help-block">个人成就</p>
+        </div>
+        <script>require(['ckeditor'], function () {
+                var editor = window.createEditor('[name="intro"]');
+            });</script>
+    </div>
+    
+    <div class="hr-line-dashed"></div>        
+    <div class="form-group">
+        <label class="col-sm-2 control-label">
+            个人经历
+        </label>
+        <div class="col-sm-8">
+            <textarea name='experience'>{$vo.experience|default=""}</textarea>                
+            <p class="help-block">个人经历</p>
+        </div>
+        <script>require(['ckeditor'], function () {
+                var editor = window.createEditor('[name="experience"]');
+            });</script>
+    </div>
+
+    
+    
+    <div class="hr-line-dashed"></div>
+    <div class="form-group">
+        <label class="col-sm-2 control-label">
+            申购价/s
+        </label>
+        <div class="col-sm-8">
+            <input name="purchase_price" onblur="this.value=(parseFloat(this.value)||0).toFixed(2)" required="required" title="请输入申购价/s" placeholder="请输入申购价/s" value='{$vo.purchase_price|default=""}' class="layui-input">
+            <p class="help-block">申购价/s</p>
+        </div>
+    </div>
+    
+    <div class="hr-line-dashed"></div>
+    <div class="form-group">
+        <label class="col-sm-2 control-label">
+            申购开始时间
+        </label>
+        <div class="col-sm-8">
+            <input name="purchase_start_time" id="purchase_start_time" value="{$vo.purchase_start_time|default=''}"  required="required"  class="layui-input">
+            <p class="help-block">申购开始时间/s</p>
+            <script>window.laydate.render({range: false,elem: "#purchase_start_time",type: 'datetime',min: '2017-8-11 12:30:00'}); </script>
+        </div>
+    </div>
+    
+    <div class="hr-line-dashed"></div>
+    <div class="form-group">
+        <label class="col-sm-2 control-label">
+            申购结束时间
+        </label>
+        <div class="col-sm-8">
+            <input name="purchase_end_time" id="purchase_end_time" value="{$vo.purchase_end_time|default=''}"  required="required"  class="layui-input">
+            <p class="help-block">申购结束时间</p>
+            <script>window.laydate.render({range: false, elem: "#purchase_end_time",type: 'datetime'}); </script>
+        </div>
+    </div>
+    
+    
+    <div class="hr-line-dashed"></div><div class="form-group">
+        <label class="col-sm-2 control-label">
+            入市价/s
+        </label>
+        <div class="col-sm-8">
+            <input name="in_market_price" onblur="this.value=(parseFloat(this.value)||0).toFixed(2)" required="required" title="请输入入市价/s" placeholder="请输入入市价/s" value='{$vo.in_market_price|default=""}' class="layui-input">
+            <p class="help-block">当申购阶段完成之后进入市场第一次的出价/s</p>
+        </div>
+    </div>
+    <div class="hr-line-dashed"></div>
+    <div class="form-group">
+        <label class="col-sm-2 control-label">
+            所属分类
+        </label>
+        <div class="col-sm-8">
+            <select name='cate_id' class='layui-select full-width' lay-ignore>
+                {foreach $aDataCate_idIdList as $aItem}
+                {eq name='$aItem.id' value='$vo.cate_id|default=0'}
+                <option selected value='{$aItem.id}'>{$aItem.name}</option>
+                {else}
+                <option value='{$aItem.id}'>{$aItem.name}</option>
+                {/eq}
+                {/foreach}
+            </select>
+        </div>
+    </div>
+    <div class="hr-line-dashed"></div>
+    <div class="form-group">
+        <label class="col-sm-2 control-label">
+            状态
+        </label>
+        <div class="col-sm-8">
+            <label class="think-radio">
+                <input type="radio" name="status" value="1" {if !isset($vo['status'])}checked{/if} {if isset($vo['status']) and $vo['status'] eq 1}checked{/if} lay-ignore="">
+                  启用
+            </label>
+            <label class="think-radio">
+                <input type="radio" name="status" value="0" {if isset($vo['status']) and $vo['status'] eq 0}checked{/if} lay-ignore="">
+                    禁用
+            </label>
+        </div>
+    </div>
+    <div class="hr-line-dashed"></div><div class="form-group">
+        <label class="col-sm-2 control-label">
+            排序
+        </label>
+        <div class="col-sm-8">
+            <input name="sort" required="required" title="请输入后台干预排序" placeholder="请输入后台干预排序" value='{$vo.sort|default="0"}' class="layui-input">
+            <p class="help-block">排序越大排序越前</p>
+        </div>
+    </div>
+    <div class="hr-line-dashed"></div>
+    <div class="col-sm-4 col-sm-offset-2">
+        <div class="layui-form-item text-center">
+            {if isset($vo['id'])}<input type='hidden' value='{$vo.id}' name='id'>{/if}
+            <button class="layui-btn" type="submit">保存</button>
+            <button class="layui-btn layui-btn-danger" type='button' data-back>返回</button>
+        </div>
+    </div>
+
+</form>
+<script>
+    require(['jquery'], function () {
+         // 单图片上传处理
+        $('input[name="thumb_img"]').uploadOneImage();
+        $('input[name="purchase_img"]').uploadOneImage();
+        // 多图片上传处理
+        $('input[name="intro_img"]').uploadMultipleImage();
+    });
+</script>
+
+{/block}

@@ -1,0 +1,161 @@
+{extend name='admin@public/content'}
+
+{block name="button"}
+
+{if auth("$classuri/ok")}
+    <button data-update  data-action='{:url("$classuri/ok")}' class='layui-btn layui-btn-sm'>批量提现</button>
+{/if}
+
+{if auth("$classuri/fail")}
+    <button data-update data-action='{:url("$classuri/fail")}' class='layui-btn layui-btn-sm layui-btn-danger'>批量提现失败</button>
+{/if}
+
+{/block}
+
+{block name="content"}
+<!-- 表单搜索 开始 -->
+<form class="layui-form layui-form-pane form-search" action="{:request()->url()}" onsubmit="return false" method="get">
+
+    <div class="layui-form-item layui-inline">
+        <label class="layui-form-label">所属用户</label>
+        <div class="layui-input-inline">
+            <input name="uid" value="{$Think.get.uname|default=''}" placeholder="请输入所属用户" class="layui-input">
+        </div>
+    </div>
+    <div class="layui-form-item layui-inline">
+        <label class="layui-form-label">后台操作用户</label>
+        <div class="layui-input-inline">
+            <input name="suname" value="{$Think.get.suname|default=''}" placeholder="后台操作用户" class="layui-input">
+        </div>
+    </div>
+    <div class="layui-form-item layui-inline">
+        <label class="layui-form-label">金额</label>
+        <div class="layui-input-inline">
+            <input name="money" value="{$Think.get.money|default=''}" placeholder="请输入金额" class="layui-input">
+        </div>
+    </div>
+
+    <div class="layui-form-item layui-inline">
+        <label class="layui-form-label">状态</label>
+        <div class="layui-input-inline">
+            <select name="status" class="layui-select" lay-search="">
+                <option value=""> - 请选择 -</option>
+                <option value="0" {if $Think.get.status eq '0'} selected {/if} > 待处理</option>
+                <option value="1" {if $Think.get.status eq '1'} selected {/if} > 已提现</option>
+                <option value="2" {if $Think.get.status eq '2'} selected {/if} > 提现失败</option>
+            </select>
+        </div>
+    </div>
+
+    <div class="layui-form-item layui-inline">
+        <label class="layui-form-label">提现时间</label>
+        <div class="layui-input-inline"><input name="create_time" id="create_time" value="{$Think.get.create_time|default=''}" placeholder="请选择提现时间" class="layui-input">
+        </div>
+        <script>window.laydate.render({range: true, elem: "#create_time"});</script>
+    </div>
+
+    <div class="layui-form-item layui-inline">
+        <label class="layui-form-label">操作时间</label>
+        <div class="layui-input-inline"><input name="opt_time" id="opt_time" value="{$Think.get.opt_time|default=''}" placeholder="请选择操作时间" class="layui-input">
+        </div>
+        <script>window.laydate.render({range: true, elem: "#opt_time"});</script>
+    </div>
+
+    <div class="layui-form-item layui-inline">
+        <button class="layui-btn layui-btn-primary"><i class="layui-icon">&#xe615;</i> 搜 索</button>
+    </div>    
+</form>
+<script>
+    window.form.render();
+</script>
+
+
+<form onsubmit="return false;" data-auto="true" method="post">
+    <!--{if empty($list)}-->
+    <p class="help-block text-center well">没 有 记 录 哦！</p>
+    <!--{else}-->
+    <input type="hidden" value="resort" name="action">
+    <table class="layui-table" lay-skin="line">
+        <thead>
+            <tr>
+                <th class='list-table-check-td'>
+                    <input data-auto-none="" data-check-target='.list-check-box' type='checkbox'>
+                </th>
+
+
+
+                <th class='text-left'>编号</th>
+                <th class='text-left'>所属用户</th>
+                <th class='text-left'>金额</th>
+                 <th class='text-left'>处理提现的人</th>
+                <th class='text-left'>状态</th>
+                <th class='text-left'>真实姓名</th>
+                <th class='text-left'>申请的账户</th>
+                
+                
+                <th class='text-left'>提现时间</th>
+                <th class='text-left'>操作时间</th>
+               
+                <th class='text-left'>支付时间</th>
+                
+
+                <th class='text-center'>操作</th>
+            </tr>
+        </thead>
+        <tbody>
+            {foreach $list as $key=>$vo}
+            <tr>
+                <td class='list-table-check-td'>
+                    <input class="list-check-box" value='{$vo.id}' type='checkbox'>
+                </td>
+
+                <td class='text-left'>{$vo.id}</td>
+                <td class='text-left'>{$vo.open_nickname}</td>
+                <td class='text-left'>{$vo.money}</td>
+                <td class='text-left'>{$vo.suname}</td>
+                <td class='text-left'>
+                    {if $vo.status eq 0}<span style="color: #a6e1ec">待处理</span>
+                    {elseif $vo.status eq 1}<span  style="color: green">提现完成</span>
+                    {elseif $vo.status eq 2}<span style="color: red">提现失败</span>              
+                    {/if}
+                </td>
+                <td class='text-left'>{$vo.pay_name}</td>
+                <td class='text-left'>{$vo.pay_account}</td>
+                
+                
+                <td class='text-left nowrap'>
+                    {$vo.create_time|format_datetime|default="<span class='color-desc'>--</span>"|raw}
+                </td> <td class='text-left nowrap'>
+                    {$vo.opt_time|format_datetime|default="<span class='color-desc'>--</span>"|raw}
+                </td>
+                
+                
+                
+                
+                <td class='text-left nowrap'>
+                    {$vo.pay_time|format_datetime|default="<span class='color-desc'>--</span>"|raw}
+                </td>
+                
+
+                <td class='text-center nowrap'>
+
+                    {if $vo.status eq 0}
+                        {if auth("$classuri/ok")}
+                            <span class="text-explode">|</span>
+                            <a data-title="设置已提现" data-update="{$vo.id}" data-field='id'  data-action='{:url("$classuri/ok")}'>设置已提现</a>
+                        {/if}
+                        {if auth("$classuri/fail")}
+                            <span class="text-explode">|</span>
+                            <a data-title="设置提现失败" data-update="{$vo.id}" data-field='id'  data-action='{:url("$classuri/fail")}'>设置提现失败</a>
+                        {/if}
+                    {/if}
+
+                </td>
+            </tr>
+            {/foreach}
+        </tbody>
+    </table>
+    {if isset($page)}<p>{$page|raw}</p>{/if}
+    <!--{/if}-->
+</form>
+{/block}

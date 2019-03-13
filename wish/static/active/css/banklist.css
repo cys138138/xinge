@@ -1,0 +1,143 @@
+/*-----------------------------------------------------------------
+Name : html5 - banklist.css
+-----------------------------------------------------------------
+Author: Johwen
+-----------------------------------------------------------------
+CreateTime: 2019-1-12 16:41:51
+-----------------------------------------------------------------
+Description: 
+-----------------------------------------------------------------*/
+body {
+    margin: 0;
+    height: 100%;
+}
+
+*{-webkit-tap-highlight-color:transparent;}
+a:focus,
+input:focus,
+p:focus,
+div:focus{
+    -webkit-tap-highlight-color:transparent;
+}
+
+a{
+    text-decoration: none;
+}
+
+ul{
+    list-style: none;
+    margin:0;
+    padding:0;
+}
+
+.container {
+    padding-top: 3rem;
+}
+
+.head-box{
+    width: 100%;
+    height: 3rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #c20202;
+    position: fixed;
+    top: 0;
+    z-index: 999;
+}
+.head-box .button{
+    width: 3rem;
+    height: 3rem;
+    line-height: 3rem;
+    text-align: center;
+    color: #FFF;
+    font-size: 1.5rem;
+}
+.head-box .head-title{
+    font-size: .9rem;
+    color: #ffcc86;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+section.content {
+    margin: 1rem;
+    border: 0px solid #c20102;
+    border-radius: 3px;
+    background-color: #c20102;
+    background: linear-gradient(to bottom right, #e63a3b , #c20102);
+}
+section.content .row{
+    display: flex;
+    align-items: center;
+}
+
+section.content .row img{width: 2.5rem;height: 2.5rem;}
+
+section.content .row > div{display: flex;flex-direction: column;margin-left: .5rem;}
+
+section.content.banklist > div{
+    color: #FFF;
+    display: flex;
+    flex-direction: column;
+    padding: 1rem;
+    border-radius: .1rem;
+    position: relative;
+}
+section.content.banklist > div .delbtn{
+    position: absolute;
+    top: .5rem;
+    right: .5rem;
+    z-index: 999;
+    color: #ffffff;
+    font: normal normal normal 14px/1 FontAwesome;
+    font-size: 1.2rem;
+    text-align: center;
+    opacity: .9;
+}
+section.content.banklist > div:after{
+    content: '';
+    background-repeat: no-repeat;
+    background-position: 120% 0;
+    width: 100%;
+    height: 100%;
+    display: block;
+    position: absolute;
+    right: 0;
+    bottom: 0;
+}
+section.content.banklist span{
+    
+}
+section.content.banklist span.bankname{
+}
+section.content.banklist span.bankaddress{
+    font-size: .8rem;
+    font-weight: 300;
+    line-height: 1.5rem;
+}.banklist span.cardnum{
+    font-size: 1.2rem;
+    line-height: 2.5rem;
+    letter-spacing: .02rem;
+    margin-top: .5rem;
+    margin-left: 3rem;
+}
+
+section.add-box{
+    padding: .8rem 1rem;
+    background-color: #c20102;
+    color: #FFF;
+    box-shadow: 0 0 5px #b30506 inset;
+}
+
+section.add-box .row{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+section.add-box .row span{
+    font-size: .9rem;
+    padding-left: .5rem;
+    font-weight: 400;
+}

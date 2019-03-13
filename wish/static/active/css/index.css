@@ -1,0 +1,394 @@
+/*-----------------------------------------------------------------
+Name : html5 - index.css
+-----------------------------------------------------------------
+Author: Johwen
+-----------------------------------------------------------------
+CreateTime: 2019-1-7 15:11:44
+-----------------------------------------------------------------
+Description: 
+-----------------------------------------------------------------*/
+
+body {
+    margin: 0;
+}
+
+*{-webkit-tap-highlight-color:transparent;}
+a:focus,
+input:focus,
+p:focus,
+div:focus{
+    -webkit-tap-highlight-color:transparent;
+}
+
+a{
+    text-decoration: none;
+}
+
+.container {
+    background-color: #f7f7f7ee;
+    color: #333;
+    background: url(../images/bg_body.jpg);
+    background-size: 100% auto;
+    padding-bottom: 2rem;
+}
+
+.img-box {
+    width: 100%;
+    position: relative;
+}
+.img-box img {
+    width: 100%;
+}
+
+section.nums-box {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    padding: 1rem 0;
+    margin-bottom: 3rem;
+}
+
+section.nums-box .column {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    text-align: center;
+    background-color: #920607;
+    margin: 0 .5rem;
+    border-radius: 50%;
+    padding: 1rem;
+    box-shadow: 0 2px 2px #ea902e;
+    border: 1px solid #860304;
+}
+
+section.nums-box span.num {
+    font-size: 1.3rem;
+    color: #fbb621;
+    text-shadow: 0 2px 2px #000000;
+}
+
+section.nums-box span.label {
+    line-height: 1.4rem;
+    color: #ffc0bf;
+    font-size: 0.6rem;
+}
+
+section.time-box {
+    /* background-color: #FFF; */
+    margin-top: 0.5rem;
+    padding: 0 1rem;
+}
+
+section.time-box center {
+    color: #ff898a;
+    padding-bottom: 0.5rem;
+}
+
+section.time-box .time {
+    text-align: center;
+    font-size: 1.5rem;
+    color: #fbb61f;
+}
+
+section.ins-box {
+    background-color: #f8efdb;
+    margin: 0 1rem;
+    margin-top: 1.5rem;
+    padding: 1rem;
+    font-size: 0.8rem;
+    box-shadow: 0 1px 3px #9e191a;
+    background: -webkit-linear-gradient(#fbd98f, #ffedd3); /* Safari 5.1 - 6.0 */
+    background: -o-linear-gradient(#fbd98f, #ffedd3); /* Opera 11.1 - 12.0 */
+    background: -moz-linear-gradient(#fbd98f, #ffedd3); /* Firefox 3.6 - 15 */
+    background: linear-gradient(#fbd98f, #ffedd3);
+    border-top: 3px solid #ff831a;
+    border-bottom: 2px solid #ff831a;
+}
+
+section.ins-box ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+section.ins-box li {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    padding: 0.2rem 0;
+    color: #e8a81d;
+}
+
+section.ins-box li .label{
+    color: #f16b48;
+}
+
+section.ins-box p {
+    margin: 0;
+}
+
+section.ins-box p a{
+    color: red;
+}
+
+section.today-box {
+    /* background-color: #FFF; */
+    margin-top: 0.5rem;
+    padding: 1rem 1rem;
+}
+
+span.title {
+    width: 13rem;
+    height: 3rem;
+    line-height: 3.3rem;
+    text-align: center;
+    font-size: .8rem;
+    padding-left: 0.5rem;
+    background:url(../images/bg_title.png);
+    background-size: 13rem 100%;
+    background-repeat: no-repeat;
+    display: block;
+    margin: 0 auto;
+    color: #f8efdb;
+}
+
+section.today-box ul {
+    height: 10rem;
+    list-style: none;
+    margin: 0;
+    margin-top: 1.5rem;
+    padding: 1rem 1rem;
+    padding-top: 1.5rem;
+    background: url(../images/bg_box01.png);
+    background-size: 100% 100%;
+    background-repeat: no-repeat;
+    color: #fbd98f;
+    font-size: .8rem;
+}
+
+section.today-box ul li {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    line-height: 3rem;
+}
+
+section.today-box ul li span{
+    min-width: 20%;
+    flex: 2;
+}
+section.today-box ul li .name{
+    flex:3;
+}
+section.today-box ul li .num{
+    min-width: 3rem;
+    text-align: left;
+}
+
+section.class-box {
+    margin-top: 0.5rem;
+    padding: 1rem;
+}
+
+section.class-box ul {
+    list-style: none;
+    margin: 0;
+    margin-top: 1rem;
+    padding: .5rem;
+    font-size: 0.8rem;
+    box-shadow: 0 1px 3px #9e191a;
+    background: -webkit-linear-gradient(#fbd98f, #ffedd3);
+    background: -o-linear-gradient(#fbd98f, #ffedd3);
+    background: -moz-linear-gradient(#fbd98f, #ffedd3);
+    background: linear-gradient(#000000, #bf0d0e);
+    border: 3px solid #ff831a;
+    border-radius: 5px;
+    box-shadow: 0 5px 10px #400000;
+}
+
+section.class-box li {
+    color: #e8a81d;
+    background-color: #8e0001;
+    border: 2px solid #6f0302;
+    animation: aborder .8s;
+    animation-iteration-count: infinite;
+}
+section.class-box li .left{
+    display: flex;
+}
+section.class-box li a{
+    width: 100%;
+    height: 100%;
+    display: block;
+}
+section.class-box li a .row{
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    padding: .5rem .5rem;
+}
+section.class-box li a .row:last-child{
+    background-color: #860203;
+    padding: .5rem;
+    font-size: .6rem;
+    color: #FFF;
+    box-shadow: 0 1px 4px #790404 inset;
+    flex-direction: row;
+}
+
+section.class-box li i{
+    font-size: 1.5rem;
+    color: #fbda928c;
+}
+
+section.class-box li .label{
+    color: #fbd98f;
+    display: block;
+    text-align: left;
+    padding: .5rem 0;
+    border-radius: 2px;
+    padding-right: 1rem;
+    flex-grow: 1;
+    font-size: 1.5rem;
+}
+
+section.class-box li .money{display: block;color: #dd8935;text-align: left;line-height: 1rem;}
+
+section.class-box li .money strong{
+    font-size: .8rem;
+    font-style: italic;
+}
+section.class-box li button{
+    width: 10rem;
+    height: 10rem;
+    line-height: 2.5rem;
+    font-size: 1.5rem;
+    color: #690001;
+    margin: 1.5rem 0;
+    outline: none;
+    border-radius: 50%;
+    background-color: #ffab00;
+    border: 1px solid #6b0203;
+    box-shadow: 0 0 20px #a56f03 inset;
+    animation: myfirst 1s;
+    animation-iteration-count: infinite;
+    animation-direction: alternate;
+}
+
+section.video-box {
+    margin-top: 0.5rem;
+    padding: 1rem;
+}
+
+section.video-box .video{
+    margin-top: 1rem;
+    background-color: #8e0000;
+    padding: 1rem .5rem;
+}
+section.video-box .video video{
+    max-width: 100%;
+}
+
+section.comment-box {
+}
+
+section.comment-box ul {
+    list-style: none;
+    background-color: #f8efdb;
+    margin: 0 1rem;
+    margin-top: 1.5rem;
+    padding: 1rem 0 1rem 1rem;
+    box-shadow: 0 1px 3px #9e191a;
+    background: -webkit-linear-gradient(#fbd98f, #ffedd3);
+    background: -o-linear-gradient(#fbd98f, #ffedd3);
+    background: -moz-linear-gradient(#fbd98f, #ffedd3);
+    background: linear-gradient(#fbd98f, #ffedd3);
+}
+
+section.comment-box ul li {
+    margin-bottom: 0.5rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 1px solid #ffcab9;
+}
+
+section.comment-box ul li .head {
+    display: flex;
+}
+section.comment-box ul li p{
+    padding-right: 1rem;
+    font-size: .8rem;
+    color: #ffa830;
+}
+
+section.comment-box ul li .avatar {
+    width: 2rem;
+    height: 2rem;
+    border-radius: 50%;
+    overflow: hidden;
+    position: relative;
+}
+
+section.comment-box ul li span.name {
+    padding-left: 0.5rem;
+    padding-top: 0.3rem;
+    color: #f16b48;
+}
+
+section.comment-box ul li .avatar img {
+    width: 100%;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+section.comment-box ul li .foot {
+    display: flex;
+    justify-content: space-between;
+}
+
+section.comment-box ul li span.time {
+    color: #f9ad96;
+    font-size: .8rem;
+}
+section.comment-box ul li span.data{
+    font-size:.8rem;
+    color: #ffa09e;
+}
+section.comment-box ul li i{
+    margin-right: .6rem;
+}
+section.comment-box ul li i::before{
+    margin-right:.2rem;
+}
+section.comment-box ul li.send-box{padding-right: 1.5rem;}
+section.comment-box ul li.send-box textarea{width: calc(100% - .5rem);height: 6rem;background-color: #ffcd5b;border: none;outline: none;padding: .5rem;}
+section.comment-box ul li.send-box button{
+    background: url(../images/bg_button.png);
+    background-size: 100%;
+    background-repeat: no-repeat;
+    background-position: center;
+    color: #ffcc5b;
+    padding: .5rem 2rem;
+    border: none;
+    font-size: .6rem;
+    margin-top: .5rem;
+}
+@keyframes myfirst
+{
+from {
+    color: #e8a81d;
+    background: #f7f7f7;
+}
+to {
+    color: #f00;
+    background: #fbdea2;
+}
+}
+
+@keyframes aborder
+{
+from {border-color: #6f0302}
+to {border-color: #7b7b03;}
+}

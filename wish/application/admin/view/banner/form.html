@@ -1,0 +1,74 @@
+
+{extend name="admin@public/content"}
+
+{block name="content"}
+<form onsubmit="return false;" action="{:request()->url()}" data-auto="true" method="post" class='form-horizontal layui-form padding-top-20'>
+    <div class="form-group">
+        <label class="col-sm-2 control-label">
+            名称
+        </label>
+        <div class="col-sm-8">
+            <input name="name" required="required" title="请输入名称" placeholder="请输入名称" value='{$vo.name|default=""}' class="layui-input">
+        </div>
+    </div>
+    <div class="hr-line-dashed"></div>     <div class="form-group">
+        <label class="col-sm-2 control-label">
+            图片
+        </label>
+        <div class="col-sm-8">
+            <img data-tips-image style="height:auto;max-height:32px;min-width:32px" src='{$vo.img|default=""}'/>
+            <input type="hidden" name="img" onchange="$(this).prev('img').attr('src', this.value)" value='{$vo.img|default="http://static.xdh-syy.com/theme/default/img/image.png"}' class="layui-input">
+            <a class="btn btn-link" data-file="one" data-uptype="{:sysconf('storage_type')}" data-type="ico,png,jpg,jpeg" data-field="img">上传图片</a>
+            <p class="help-block">建议尺寸为</p>
+        </div>
+    </div>
+    <div class="hr-line-dashed"></div><div class="form-group">
+        <label class="col-sm-2 control-label">
+            排序
+        </label>
+        <div class="col-sm-8">
+            <input name="sort" required="required" title="请输入排序" placeholder="请输入排序" value='{$vo.sort|default=""}' class="layui-input">
+        </div>
+    </div>
+
+    
+     <div class="hr-line-dashed"></div>
+    <div class="form-group">
+        <label class="col-sm-2 control-label">
+            类型
+        </label>
+        <div class="col-sm-8">
+            <div class="">
+                <select name='type' class='layui-select' lay-ignore>
+                    <option value="1">分类</option>
+                    <option value="2">单品</option>
+                </select>
+            </div>
+            <p class="help-block">如果类型 为分类这内容必须填写分类 id 如果类型为 单品 内容必须为商品id</p>
+        </div>
+    </div>
+    
+    <div class="hr-line-dashed"></div>
+    <div class="form-group">
+        <label class="col-sm-2 control-label">
+            内容
+        </label>
+        <div class="col-sm-8">
+            <input name="content" required="required" title="请输入内容" placeholder="请输入内容" value='{$vo.content|default=""}' class="layui-input">
+            <p class="help-block">如果类型 为分类这内容必须填写分类 id 如果类型为 单品 内容必须为商品id</p>
+        </div>
+    </div>
+    
+   
+    
+    <div class="hr-line-dashed"></div>
+    <div class="col-sm-4 col-sm-offset-2">
+        <div class="layui-form-item text-center">
+            {if isset($vo['id'])}<input type='hidden' value='{$vo.id}' name='id'>{/if}
+            <button class="layui-btn" type="submit">保存</button>
+            <button class="layui-btn layui-btn-danger" type='button' data-back>返回</button>
+        </div>
+    </div>
+
+</form>
+{/block}

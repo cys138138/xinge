@@ -1,0 +1,16 @@
+
+{extend name="admin@public/content"}
+
+{block name="content"}
+<form onsubmit="return false;" action="{:request()->url()}" data-auto="true" method="post" class='form-horizontal layui-form padding-top-20'>
+    {__FEILD_LIST__}
+    <div class="col-sm-4 col-sm-offset-2">
+        <div class="layui-form-item text-center">
+            {if isset($vo['id'])}<input type='hidden' value='{$vo.id}' name='id'>{/if}
+            <button class="layui-btn" type="submit">保存</button>
+            <button class="layui-btn layui-btn-danger" type='button' data-back>返回</button>
+        </div>
+    </div>
+
+</form>
+{/block}

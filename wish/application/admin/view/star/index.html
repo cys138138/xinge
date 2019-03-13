@@ -1,0 +1,247 @@
+{extend name='admin@public/content'}
+
+{block name="button"}
+
+{if auth("$classuri/add")}
+<button data-open='{:url("$classuri/add")}' data-title="添加" class='layui-btn layui-btn-sm'>添加</button>
+{/if}
+
+{if auth("$classuri/del")}
+<button data-update data-field='delete' data-action='{:url("$classuri/del")}' class='layui-btn layui-btn-sm layui-btn-danger'>批量删除</button>
+{/if}
+{/block}
+
+{block name="content"}
+<!-- 表单搜索 开始 -->
+<form class="layui-form layui-form-pane form-search" action="{:request()->url()}" onsubmit="return false" method="get">
+
+    <div class="layui-form-item layui-inline">
+        <label class="layui-form-label">姓名</label>
+        <div class="layui-input-inline">
+            <input name="name" value="{$Think.get.name|default=''}" placeholder="请输入姓名" class="layui-input">
+        </div>
+    </div>
+    <div class="layui-form-item layui-inline">
+        <label class="layui-form-label">代号</label>
+        <div class="layui-input-inline">
+            <input name="code" value="{$Think.get.code|default=''}" placeholder="请输入代号" class="layui-input">
+        </div>
+    </div>
+    <div class="layui-form-item layui-inline">
+        <label class="layui-form-label">身份</label>
+        <div class="layui-input-inline">
+            <input name="identity" value="{$Think.get.identity|default=''}" placeholder="请输入身份" class="layui-input">
+        </div>
+    </div>
+    
+    
+    
+    <div class="layui-form-item layui-inline">
+        <label class="layui-form-label">申购价/s</label>
+        <div class="layui-input-inline">
+            <input name="min_price" value="{$Think.get.purchase_price|default=''}" placeholder="请输入申购价/s" class="layui-input">
+        </div>
+    </div>
+    <div class="layui-form-item layui-inline">
+        <label class="layui-form-label">入市价/s</label>
+        <div class="layui-input-inline">
+            <input name="max_price" value="{$Think.get.in_market_price|default=''}" placeholder="请输入申购平台有剩余入市价/s" class="layui-input">
+        </div>
+    </div>
+    <div class="layui-form-item layui-inline">
+        <label class="layui-form-label">总时长/s</label>
+        <div class="layui-input-inline">
+            <input name="time_length" value="{$Think.get.time_length|default=''}" placeholder="请输入本次总时长/s" class="layui-input">
+        </div>
+    </div>
+    <div class="layui-form-item layui-inline">
+        <label class="layui-form-label">创建时间</label>
+        <div class="layui-input-inline"><input name="create_time" id="create_time" value="{$Think.get.create_time|default=''}" placeholder="请选择创建时间" class="layui-input">
+        </div>
+        <script>window.laydate.render({range: true, elem: "#create_time"});</script>
+    </div>
+
+    <div class="layui-form-item layui-inline">
+        <label class="layui-form-label">更新时间</label>
+        <div class="layui-input-inline"><input name="update_time" id="update_time" value="{$Think.get.update_time|default=''}" placeholder="请选择更新时间" class="layui-input">
+        </div>
+        <script>window.laydate.render({range: true, elem: "#update_time"});</script>
+    </div>
+
+   
+   
+    <div class="layui-form-item layui-inline">
+        <label class="layui-form-label">进行状态</label>
+        <div class="layui-input-inline">
+            <select name="type" class="layui-select" lay-search="">
+                <option value=""> - 请选择 -</option>
+                <option value="0" {if $Think.get.type eq '0'} selected {/if} > 预售</option>
+                <option value="1" {if $Think.get.type eq '1'} selected {/if} > 申购</option>
+                <option value="2" {if $Think.get.type eq '2'} selected {/if} > 入市中</option>
+                <option value="3" {if $Think.get.type eq '3'} selected {/if} > 结束</option>
+            </select>
+        </div>
+    </div>
+    
+    <div class="layui-form-item layui-inline">
+        <label class="layui-form-label">所属分类</label>
+        <div class="layui-input-inline">
+            <select name='cate_id' class='layui-select full-width' lay-ignore>
+                <option value=""> - 请选择 -</option>
+                {foreach $aDataCate_idIdList as $aItem}
+                {eq name='$aItem.id' value='$Think.get.cate_id|default=""'}
+                <option selected value='{$aItem.id}'>{$aItem.name}</option>
+                {else}
+                <option value='{$aItem.id}'>{$aItem.name}</option>
+                {/eq}
+                {/foreach}
+            </select>            
+        </div>
+    </div>
+    <div class="layui-form-item layui-inline">
+        <label class="layui-form-label">状态</label>
+        <div class="layui-input-inline">
+            <select name="status" class="layui-select" lay-search="">
+                <option value=""> - 请选择 -</option>
+                <option value="0" {if $Think.get.status eq '0'} selected {/if} > 禁用</option>
+                <option value="1" {if $Think.get.status eq '1'} selected {/if} > 启用</option>
+            </select>
+        </div>
+    </div>
+    <div class="layui-form-item layui-inline">
+        <button class="layui-btn layui-btn-primary"><i class="layui-icon">&#xe615;</i> 搜 索</button>
+    </div>    
+</form>
+<script>
+    window.form.render();
+</script>
+
+
+<form onsubmit="return false;" data-auto="true" method="post">
+    <!--{if empty($list)}-->
+    <p class="help-block text-center well">没 有 记 录 哦！</p>
+    <!--{else}-->
+    <input type="hidden" value="resort" name="action">
+    <table class="layui-table" lay-skin="line">
+        <thead>
+            <tr>
+                <th class='list-table-check-td'>
+                    <input data-auto-none="" data-check-target='.list-check-box' type='checkbox'>
+                </th>
+
+                <th class='list-table-sort-td'>
+                    <button type="submit" class="layui-btn layui-btn-normal layui-btn-xs">排 序</button>
+                </th>
+
+                <th class='text-left'>ID</th>
+                <th class='text-left'>姓名</th>                
+                <th class='text-left'>所属分类</th>
+                <th class='text-left'>代号</th>
+                <th class='text-left'>总时长</th>
+                <th class='text-left'>职业</th>
+                <th class='text-left'>形象图</th>
+                <th class='text-left'>类型</th>
+                <th class='text-left'>申购价/s</th>
+                <th class='text-left'>入市价/s</th>
+                <th class='text-left'>创建时间</th>
+                <th class='text-left'>更新时间</th>
+                <th class='text-left'>状态</th>
+
+                <th class='text-center'>操作</th>
+            </tr>
+        </thead>
+        <tbody>
+            {foreach $list as $key=>$vo}
+            <tr>
+                <td class='list-table-check-td'>
+                    <input class="list-check-box" value='{$vo.id}' type='checkbox'>
+                </td>
+
+                <td class='list-table-sort-td'>
+                    <input name="_{$vo.id}" value="{$vo.sort}" class="list-sort-input">
+                </td>
+                <td class='text-left'>{$vo.id}</td>
+                <td class='text-left'>{$vo.name}</td>
+                <td class='text-left'>{$vo.cate_name}</td>
+                <td class='text-left'>{$vo.code}</td>
+                <td class='text-left'>{$vo.time_length}</td>
+                <td class='text-left'>{$vo.identity}</td>
+                <td class='text-left nowrap'>
+                    <img data-tips-image='{$vo.thumb_img}'  class="list-table-image" width="100px" src='{$vo.thumb_img}'></div>
+                </td>                
+                <td class='text-left'>
+                    {if $vo.type eq 0}<span style="color: #a6e1ec">预购中</span>
+                    {elseif $vo.type eq 1}<span  style="color: green">申购中</span>
+                    {elseif $vo.type eq 2}<span style="color: #00F7DE">入市中</span>
+                    {elseif $vo.type eq 3}<span style="color: red">结束</span>                    
+                    {/if}
+                </td>
+                <td class='text-left'>{$vo.purchase_price}</td>
+                <td class='text-left'>{$vo.in_market_price}</td>
+                <td class='text-left nowrap'>
+                    {$vo.create_time|format_datetime|default="<span class='color-desc'>--</span>"|raw}
+                </td> <td class='text-left nowrap'>
+                    {$vo.update_time|format_datetime|default="<span class='color-desc'>--</span>"|raw}
+                </td>
+                
+                <td class='text-center'>
+                    {if $vo.status eq 0}<span>已禁用</span>{elseif $vo.status eq 1}<span class="color-green">使用中</span>{/if}
+                </td>            
+                <td class='text-center nowrap'>
+                    
+                    {if $vo.type eq 1 and $vo.purchase_end_time lt time()}
+                        {if auth("$classuri/purchase")}
+                            <span class="text-explode">|</span>
+                            <a data-title="申购分配计算处理" data-open='{:url("$classuri/purchase")}?id={$vo.id}'>申购分配</a>
+                        {/if}
+                    {/if}
+                    {if auth("$classuri/edit")}
+                    <span class="text-explode">|</span>
+                    <a data-title="行程管理" data-open='{:url("@admin/star_attr/index")}?star_id={$vo.id}'>行权管理</a>
+                    {/if}
+                    
+                    
+                    {if auth("$classuri/edit")}
+                    <span class="text-explode">|</span>
+                    <a data-title="买方市场" data-open='{:url("@admin/star_market/index")}?star_id={$vo.id}&type=0'>买方市场</a>
+                    {/if}
+                    
+                    {if auth("$classuri/edit")}
+                    <span class="text-explode">|</span>
+                    <a data-title="卖方市场" data-open='{:url("@admin/star_market/index")}?star_id={$vo.id}&type=1'>卖方市场</a>
+                    {/if}
+                    
+                    {if auth("$classuri/edit")}
+                    <span class="text-explode">|</span>
+                    <a data-title="编辑" data-open='{:url("$classuri/edit")}?id={$vo.id}'>编辑</a>
+                    {/if}
+
+                    {if $vo.status eq 1 and auth("$classuri/forbid")}
+                    <span class="text-explode">|</span>
+                    <a data-update="{$vo.id}" data-field='status' data-value='0' data-action='{:url("$classuri/forbid")}'>禁用</a>
+                    {elseif auth("$classuri/resume")}
+                    <span class="text-explode">|</span>
+                    <a data-update="{$vo.id}" data-field='status' data-value='1' data-action='{:url("$classuri/resume")}'>启用</a>
+                    {/if}
+                    
+                    {if $vo.is_push eq 1 and auth("$classuri/push")}
+                    <span class="text-explode">|</span>
+                    <a data-update="{$vo.id}" data-field='is_push' data-value='0' data-action='{:url("$classuri/push")}'>取消置顶</a>
+                    {elseif auth("$classuri/push")}
+                    <span class="text-explode">|</span>
+                    <a data-update="{$vo.id}" data-field='is_push' data-value='1' data-action='{:url("$classuri/push")}'>置顶</a>
+                    {/if}
+
+                    {if auth("$classuri/del")}
+                    <span class="text-explode">|</span>
+                    <a data-update="{$vo.id}" data-field='delete' data-action='{:url("$classuri/del")}'>删除</a>
+                    {/if}
+                </td>
+            </tr>
+            {/foreach}
+        </tbody>
+    </table>
+    {if isset($page)}<p>{$page|raw}</p>{/if}
+    <!--{/if}-->
+</form>
+{/block}
