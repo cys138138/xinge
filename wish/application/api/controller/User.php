@@ -131,15 +131,14 @@ class User extends BaseController {
             $aUserOpenBinds['user_id'] = $userId;
             $aUserOpenBinds['createtime'] = $time;
             Db::name('user_open_binds')->insert($aUserOpenBinds);
-            //
+            $aUserInfo['mobile'] = '';
+            $aUserInfo['sign'] = '';
         } else {
+            $aUserInfo['nickName'] = $mUser['username'] ? $mUser['username'] : $aUserInfo['nickName'];
+            $aUserInfo['mobile'] = $mUser['mobile'] ? $mUser['mobile'] : '';
+            $aUserInfo['sign'] = $mUser['sign'] ? $mUser['sign'] : '';
             $userId = $mUser['user_id'];
             Db::name('user_open_binds')->where(['user_id' => $userId])->update($aUserOpenBinds);
-        }
-        $aUser = Db::name('users')->where(['id' => $userId])->find();
-        $aUserInfo['is_bind_mobile'] = 0;
-        if ($aUser['mobile']) {
-            $aUserInfo['is_bind_mobile'] = 1;
         }
         $aUserInfo['userId'] = $userId;
         $this->success('用户ok', null, $aUserInfo);
