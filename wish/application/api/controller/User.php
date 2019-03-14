@@ -18,24 +18,29 @@ use WeMini\Qrcode;
 class User extends BaseController {
 
     /**
-     * 设置用户身份证和真实姓名信息
+     * 设置用基础信息
      */
     public function setUserInfo() {
         $uid = (int) $this->request->post('uid', 0);
-        $trueName = $this->request->post('true_name', '');
-        $idno = $this->request->post('id_no', '');
-        if (!$trueName || !$idno || !$uid) {
-            $this->error('身份证号码和真实姓名必填uid');
+        $username = $this->request->post('username', '');
+        $mobile = $this->request->post('mobile', '');
+        $sign = $this->request->post('sign', '');
+        if ($mobile) {
+            if (!preg_match("/^1\d{10}$/", $mobile)) {
+                $this->error('手机号码不合法');
+            }
         }
-        $aUserInfo = Db::name('user_infos')->where(['user_id' => $uid])->find();
+
+        $aUserInfo = Db::name('users')->where(['id' => $uid])->find();
         if (!$aUserInfo) {
             $this->error('用户不存在');
         }
-        Db::name('user_infos')
-                ->where(['user_id' => $uid])
+        Db::name('users')
+                ->where(['id' => $uid])
                 ->update([
-                    'id_true_name' => $trueName,
-                    'id_no' => $idno,
+                    'username' => $username,
+                    'mobile' => $mobile,
+                    'sign' => $sign,
         ]);
         $this->success('设置成功');
     }
