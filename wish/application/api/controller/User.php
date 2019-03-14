@@ -63,6 +63,7 @@ class User extends BaseController {
         ]);
         $this->success('设置成功，请牢记交易密码');
     }
+
     /**
      * 用户登录
      */
@@ -72,7 +73,7 @@ class User extends BaseController {
         $iv = $this->request->post('iv', '');
         $code = $this->request->post('code', '');
         $decode = $this->request->post('decode', '');
-        $pid = (int)$this->request->post('pid', 0);
+        $pid = (int) $this->request->post('pid', 0);
         //$sessionKey = $this->request->post('session_key', 'OetNxl86B/yMpbwG6wtMEw==');
         if (!$iv || !$code || !$decode) {
             $this->error('参数错误');
@@ -135,11 +136,11 @@ class User extends BaseController {
             $userId = $mUser['user_id'];
             Db::name('user_open_binds')->where(['user_id' => $userId])->update($aUserOpenBinds);
         }
-        $aUser = Db::name('users')->where(['id'=>$userId])->find();
-		$aUserInfo['is_bind_mobile'] = 0;
-		if($aUser['mobile']){
-			$aUserInfo['is_bind_mobile'] = 1;
-		}
+        $aUser = Db::name('users')->where(['id' => $userId])->find();
+        $aUserInfo['is_bind_mobile'] = 0;
+        if ($aUser['mobile']) {
+            $aUserInfo['is_bind_mobile'] = 1;
+        }
         $aUserInfo['userId'] = $userId;
         $this->success('用户ok', null, $aUserInfo);
     }
@@ -158,7 +159,7 @@ class User extends BaseController {
         }
         $aUserInfo = Db::name('user_open_binds')->where(['user_id' => $userId])->find();
         $aUser = Db::name('users')->where(['id' => $userId])->find();
-        if(!$aUser['is_have_share_auth']){
+        if (!$aUser['is_have_share_auth']) {
             $this->error('你所在的等级不能分享');
         }
         if ($aUserInfo['share_wx_app_qr_img']) {
@@ -187,6 +188,7 @@ class User extends BaseController {
         }
         $this->success('获取生成二维码成功', null, ['img_url' => $url]);
     }
+
     /**
      * 获取我邀请的人
      * @return type
@@ -207,17 +209,17 @@ class User extends BaseController {
         $list['count'] = $count;
         return $this->success('获取成功', null, $list);
     }
-    
+
     /**
      * 发送短信验证码
      */
     public function getMsgcode() {
         $userId = (int) $this->request->post('uid', 0);
         $mobile = $this->request->post('mobile', '');
-        if(!$mobile){
+        if (!$mobile) {
             return $this->error('手机号码不能为空');
         }
-        $aUser = Db::name('users')->where(['mobile' => $mobile])->where('id !='. $userId)->find();
+        $aUser = Db::name('users')->where(['mobile' => $mobile])->where('id !=' . $userId)->find();
         if ($aUser) {
             return $this->error('手机号码已绑定其他账号');
         }
@@ -238,7 +240,7 @@ class User extends BaseController {
         }
         return $this->success('发送成功，请留意短信');
     }
-    
+
     /**
      * 验证验证码绑定手机
      */
@@ -246,10 +248,10 @@ class User extends BaseController {
         $userId = (int) $this->request->post('uid', 0);
         $mobile = $this->request->post('mobile', '');
         $code = $this->request->post('code', '');
-        if(!$mobile || !$code){
+        if (!$mobile || !$code) {
             return $this->error('参数不能为空');
         }
-        $aUser = Db::name('users')->where(['mobile' => $mobile])->where('id !='.$userId)->find();
+        $aUser = Db::name('users')->where(['mobile' => $mobile])->where('id !=' . $userId)->find();
         if ($aUser) {
             return $this->error('手机号码已绑定其他账号');
         }
@@ -271,6 +273,82 @@ class User extends BaseController {
         Db::name('users')->where(['id' => $userId])->update(['mobile' => $mobile]);
         Db::name('app_mobile_code')->where(['uid' => $userId, 'mobile' => $mobile, 'status' => 1])->update(['status' => 2, 'update_time' => NOW_TIME]);
         return $this->success('成功绑定手机号码');
+    }
+
+    /**
+     * 
+     * Array ( [total_day_nums] => 7 [total_nums] => 99 [today_need_money] => 100 [back_total_nums] => 9 )
+     * @return type
+     */
+    public function getWish() {
+        $userId = (int) $this->request->post('uid', 4);
+        $aWish = Db::name('wish')->where(['uid' => $userId, 'status' => 1])->find();
+        if (!$aWish) {
+            return $this->error('愿望不存在，请先创建愿望');
+        }
+        //计算
+        $target_money = $aWish['target_money'];
+        $okMoney = UserService::getWishTotalMoney($aWish['id']);
+        if ($target_money <= $okMoney) {
+            return $this->error('愿望实现，开启新的愿望吧');
+        }
+        $aData = UserService::getWishNeedMoneyInfo($aWish['id']);
+        $this->success('获取成功 ：total_day_nums 已经生存天数 total_nums 总共存了多少桶 today_need_money 今天需要存的桶数 back_total_nums 还需要几天返回', '', $aData);
+    }
+    
+    /**
+     * uid 用户id
+     * title 愿望标题
+     * target_money 愿望目标金额
+     * target_type 愿望时间类型 1 按天 2按周 3 按月
+     * one_money 如果 target_type 是1 则这里是每天需要存的金额 target_type 是 2  则这里是每周需要存的金额 target_type 是3  则这里是每月需要存的金额 
+     * @return type
+     */
+
+    public function createWish() {
+        $userId = (int) $this->request->post('uid', 4);
+        $title = $this->request->post('title', '去玩');
+        $target_money = (int) $this->request->post('target_money', 88);
+        $target_type = (int) $this->request->post('target_type', 1);
+        $one_money = (int) $this->request->post('one_money', 8);
+        if (!$title) {
+            return $this->error('愿望名称必填');
+        }
+        if (!$target_money) {
+            return $this->error('目标金额必填');
+        }
+        if (!$target_type) {
+            return $this->error('愿望时间单位必选');
+        }
+        if (!$one_money) {
+            return $this->error('愿望时间单位必填');
+        }
+
+        if ($target_money < 1) {
+            return $this->error('目标金额必须大于1元');
+        }
+        if ($one_money < 1) {
+            return $this->error('目标单元金额必须大于1');
+        }
+        $aWish = Db::name('wish')->where(['uid' => $userId, 'status' => 1])->find();
+        if ($aWish) {
+            return $this->error('还有未完成的愿望呢！请先完成');
+        }
+
+        $aData = [
+            'uid' => $userId,
+            'title' => $title,
+            'target_money' => $target_money,
+            'target_type' => $target_type,
+            'one_money' => $one_money,
+            'create_time' => NOW_TIME,
+            'status' => 1,
+        ];
+        if ($id = Db::name('wish')->insertGetId($aData)) {
+            $aData = UserService::getWishNeedMoneyInfo($id);
+            $this->success('创建成功 ：total_day_nums 已经生存天数 total_nums 总共存了多少桶 today_need_money 今天需要存的桶数 back_total_nums 还需要几天返回', '', $aData);
+        }
+        return $this->error('出错了重试。。');
     }
 
 }
