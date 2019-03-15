@@ -28,18 +28,6 @@
             <input name="uname" value="{$Think.get.uname|default=''}" placeholder="请输入用户呢称" class="layui-input">
         </div>
     </div>
-    <div class="layui-form-item layui-inline">
-        <label class="layui-form-label">真实姓名</label>
-        <div class="layui-input-inline">
-            <input name="true_name" value="{$Think.get.true_name|default=''}" placeholder="请输入真实姓名" class="layui-input">
-        </div>
-    </div>
-    <div class="layui-form-item layui-inline">
-        <label class="layui-form-label">身份证号码</label>
-        <div class="layui-input-inline">
-            <input name="idno" value="{$Think.get.idno|default=''}" placeholder="请输入身份证号码" class="layui-input">
-        </div>
-    </div>
     
     <div class="layui-form-item layui-inline">
         <label class="layui-form-label">状态</label>
@@ -53,17 +41,6 @@
         </div>
     </div>
     <div class="layui-form-item layui-inline">
-        <label class="layui-form-label">分享二维码权限</label>
-        <div class="layui-input-inline">
-            <select name="is_have_share_auth" class="layui-select" lay-search="">
-                <option value=""> - 请选择 -</option>
-                <option value="0" {if $Think.get.is_have_share_auth eq '0'} selected {/if} > 没权限</option>
-                <option value="1" {if $Think.get.is_have_share_auth eq '1'} selected {/if} > 有权限</option>
-            </select>
-        </div>
-    </div>
-    
-    <div class="layui-form-item layui-inline">
         <label class="layui-form-label">加入时间</label>
         <div class="layui-input-inline">
             <input id="createtime" name="createtime" value="{$Think.get.createtime|default=''}" placeholder="请选择时间段" class="layui-input">
@@ -74,12 +51,6 @@
         <label class="layui-form-label">账户余额</label>
         <div class="layui-input-inline">
             <input name="money" value="{$Think.get.money|default=''}" placeholder="请输入账户余额" class="layui-input">
-        </div>
-    </div>
-    <div class="layui-form-item layui-inline">
-        <label class="layui-form-label">上级（推荐人id）</label>
-        <div class="layui-input-inline">
-            <input name="pid" value="{$Think.get.pid|default=''}" placeholder="请输入上级id" class="layui-input">
         </div>
     </div>
     <div class="layui-form-item layui-inline">
@@ -104,15 +75,9 @@
                 </th>
                 <th class='text-left'>id</th>
                 <th class='text-left'>呢称</th>
-                <th class='text-left'>真实姓名</th>
-                <th class='text-left'>身份证</th>
                 <th class='text-left'>手机</th>
                 <th class='text-left'>状态</th>
-                <th class='text-left'>分享权限</th>
                 <th class='text-left'>加入时间</th>
-                <th class='text-left'>账户余额</th>
-                <th class='text-left'>上级（推荐人id）</th>
-
                 <th class='text-center'>操作</th>
             </tr>
         </thead>
@@ -125,8 +90,6 @@
 
                 <td class='text-left'>{$vo.id}</td>
                 <td class='text-left'>{$vo.open_nickname}</td>
-                <td class='text-left'>{$vo.id_true_name}</td>
-                <td class='text-left'>{$vo.id_no}</td>
                 <td class='text-left'>{$vo.mobile}</td>
                 <td class='text-center'>
                     {if $vo.status eq 0}<span>未激活</span>
@@ -135,18 +98,8 @@
                     
                     {/if}
                 </td>
-                <td class='text-center'>
-                    {if $vo.is_have_share_auth eq 0}<span>无</span>
-                    {elseif $vo.is_have_share_auth eq 1}<span class="color-green">有</span>
-                    
-                    {/if}
-                </td>
                 
                 <td class='text-left'>{$vo.createtime|format_datetime|default="<span class='color-desc'>--</span>"|raw}</td>
-                
-                <td class='text-left'>{$vo.money}</td>
-                <td class='text-left'>{$vo.pid}</td>
-
                 <td class='text-center nowrap'>
 
 
