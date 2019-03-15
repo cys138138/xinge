@@ -142,7 +142,7 @@ class User extends BaseController {
             
             $aMainU = Db::name('users')->find($mUser['user_id']);
             $aUserInfo['nickName'] = $aMainU['username'] ? $aMainU['username'] : $aUserInfo['nickName'];
-            $aUserInfo['mobile'] = $mUser['mobile'] ? $mUser['mobile'] : '';
+            $aUserInfo['mobile'] = $aMainU['mobile'] ? $aMainU['mobile'] : '';
             $aUserInfo['sign'] = $mUser['sign'] ? $mUser['sign'] : '';
             $userId = $mUser['user_id'];
             Db::name('user_open_binds')->where(['user_id' => $userId])->update($aUserOpenBinds);
