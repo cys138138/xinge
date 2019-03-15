@@ -139,7 +139,9 @@ class User extends BaseController {
             $aUserInfo['mobile'] = '';
             $aUserInfo['sign'] = '';
         } else {
-            $aUserInfo['nickName'] = $mUser['username'] ? $mUser['username'] : $aUserInfo['nickName'];
+            
+            $aMainU = Db::name('users')->find($mUser['user_id']);
+            $aUserInfo['nickName'] = $aMainU['username'] ? $aMainU['username'] : $aUserInfo['nickName'];
             $aUserInfo['mobile'] = $mUser['mobile'] ? $mUser['mobile'] : '';
             $aUserInfo['sign'] = $mUser['sign'] ? $mUser['sign'] : '';
             $userId = $mUser['user_id'];
