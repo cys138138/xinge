@@ -18,6 +18,9 @@ class Feedback extends BaseController {
         $uid = (int) $this->request->post('uid', 0);
         $content = $this->request->post('content', '');
         $bs64 = $this->request->post('bs_64_list', '');
+        if(!$content){
+            return $this->error('反馈内容为空');
+        }
 
         $feedback = Db::name('app_feedback')->where(['uid' => $uid])->find();
         //5分钟不允许不断提交
