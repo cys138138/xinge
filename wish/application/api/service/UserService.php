@@ -11,7 +11,26 @@ class UserService {
     public static function getWishTotalMoney($id) {
         return Db::name('wish_order')->where(['wish_id' => $id])->sum('money');
     }
-    
+    public static function getWishTotalDay($wishId) {
+        $todayS = 60 * 60 * 24;
+        $aLastWish = Db::name('wish')->where(['id' => $wishId, 'status' => 1])->find();
+        $diffDay = intval((NOW_TIME - $aLastWish['create_time']) / $todayS);
+        return $diffDay;
+    }
+    public static function getWishNumber($wishId) {
+        $todayS = 60 * 60 * 24;
+        $aLastWish = Db::name('wish')->where(['id' => $wishId, 'status' => 1])->find();        
+        return $aLastWish['number'];
+    }
+    public static function getWishQifuNums($wishId) {
+        return Db::name('wish_blessing')->where(['wish_id' => $wishId])->count();
+        $fudaiNums = Db::name('wish_blessing')->where(['wish_id' => $wishId])->sum('fudai_shus');
+    }
+
+    public static function getWishFudaiNums($wishId) {
+        return Db::name('wish_blessing')->where(['wish_id' => $wishId])->sum('fudai_shus');
+    }
+
     public static function getWishNeedMoneyInfo($id) {
         $todayS = 60 * 60 * 24;
         $aWish = Db::name('wish')->where(['id' => $id])->find();
