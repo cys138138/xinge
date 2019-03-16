@@ -25,8 +25,9 @@ class Wish extends BaseController {
         }
         foreach($aWishList as &$aWish){
             $aWish['fudai_shu'] = 10;
-            $aUser = Db::name('users')->find($aWish['uid']);
-            $aWish['username'] = $aUser['username'];
+            $aUser = Db::name('user_open_binds')->where(['user_id'=>$aWish['uid']])->find();
+            $aWish['username'] = $aUser['open_nickname'];
+            $aWish['img_url'] = $aUser['open_head'];
             $aWish['info'] = UserService::getWishNeedMoneyInfo($aWish['id']);
         }        
         $this->success('获取成功 星球星愿列表', '', $aWishList);
