@@ -114,6 +114,7 @@ class User extends BaseController {
             //主表
             $aMainUser = [
                 'status' => 1,
+                'username' => $aUserInfo['nickName'],
                 'createtime' => $time,
                 'updatetime' => $time,
             ];
