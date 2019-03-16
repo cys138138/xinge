@@ -151,7 +151,7 @@ class User extends BaseController {
             $aUserInfo['mobile'] = $aMainU['mobile'] ? $aMainU['mobile'] : '';
             $aUserInfo['sign'] = $aMainU['sign'] ? $aMainU['sign'] : '';
             $userId = $mUser['user_id'];
-            Db::name('users')->where(['id' => $aMainU['id']])->save([
+            Db::name('users')->where(['id' => $aMainU['id']])->update([
                 'head_img_url' => $aUserOpenBinds['open_head'],
             ]);
             Db::name('user_open_binds')->where(['user_id' => $userId])->update($aUserOpenBinds);
