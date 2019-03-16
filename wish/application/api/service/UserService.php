@@ -24,7 +24,6 @@ class UserService {
     }
     public static function getWishQifuNums($wishId) {
         return Db::name('wish_blessing')->where(['wish_id' => $wishId])->count();
-        $fudaiNums = Db::name('wish_blessing')->where(['wish_id' => $wishId])->sum('fudai_shus');
     }
 
     public static function getWishFudaiNums($wishId) {
