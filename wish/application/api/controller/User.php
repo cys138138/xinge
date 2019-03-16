@@ -69,10 +69,10 @@ class User extends BaseController {
         $this->success('设置成功，请牢记交易密码');
     }
 
-    public function getUserBaseInfo(){
+    public function getUserBaseInfo() {
         
     }
-    
+
     /**
      * 用户登录
      */
@@ -145,7 +145,7 @@ class User extends BaseController {
             $aUserInfo['mobile'] = '';
             $aUserInfo['sign'] = '';
         } else {
-            
+
             $aMainU = Db::name('users')->find($mUser['user_id']);
             $aUserInfo['nickName'] = $aMainU['username'] ? $aMainU['username'] : $aUserInfo['nickName'];
             $aUserInfo['mobile'] = $aMainU['mobile'] ? $aMainU['mobile'] : '';
@@ -310,7 +310,7 @@ class User extends BaseController {
         $aData = UserService::getWishNeedMoneyInfo($aWish['id']);
         $this->success('获取成功 ：total_day_nums 已经生存天数 total_nums 总共存了多少桶 today_need_money 今天需要存的桶数 back_total_nums 还需要几天返回', '', $aData);
     }
-    
+
     /**
      * uid 用户id
      * title 愿望标题
@@ -319,7 +319,6 @@ class User extends BaseController {
      * one_money 如果 target_type 是1 则这里是每天需要存的金额 target_type 是 2  则这里是每周需要存的金额 target_type 是3  则这里是每月需要存的金额 
      * @return type
      */
-
     public function createWish() {
         $userId = (int) $this->request->post('uid', 4);
         $title = $this->request->post('title', '去玩');
@@ -366,22 +365,61 @@ class User extends BaseController {
         }
         return $this->error('出错了重试。。');
     }
-    
+
+    /**
+     * 获取愿望详情
+     */
     public function getMyWishInfo() {
-        $wishId = (int) $this->request->post('wish_id', 4);
-        $uid = (int) $this->request->post('uid', 4);
+        $wishId = (int) $this->request->post('wish_id', 0);
+        $uid = (int) $this->request->post('uid', 0);
         $aLastWish = Db::name('wish')->where(['id' => $wishId, 'status' => 1])->find();
         $aUser = Db::name('users')->where(['id' => $uid])->find();
         $aData['u_name'] = $aUser['username'];
-        $aData['head_img'] = $aUser['head_img_url'];
+        $aData['head_img'] = $aUser['head_img_url'];        
+        $aData['login_date'] = date('Y-m-d', $aLastWish['create_time']);
+        $aData = array_merge($aData,$this->_getWishBaseInfo($wishId));
+        $this->success('获取成功 ：shengcun_nums 已经生存天数 qifu_nums 祈福数量 fudai_nums 福袋数量', '', $aData);
+    }
+    
+    private function _getWishBaseInfo($wishId){
         $aData['shengcun_nums'] = (int) UserService::getWishTotalDay($wishId);
         $aData['qifu_nums'] = (int) UserService::getWishQifuNums($wishId);
         $aData['fudai_nums'] = (int) UserService::getWishFudaiNums($wishId);
         $aData['wish_number'] = (int) UserService::getWishNumber($wishId);
-        $aData['login_date'] = date('Y-m-d', $aLastWish['create_time']);
         $aWishInfo = UserService::getWishNeedMoneyInfo($wishId);
         $aData['need_jianchi_day'] = $aWishInfo['back_total_nums'];
-        $this->success('获取成功 ：shengcun_nums 已经生存天数 qifu_nums 祈福数量 fudai_nums 福袋数量', '', $aData);
+        return $aData;
+    }
+
+    /**
+     * 获取公有愿望信息
+     */
+    public function getPublicWishList() {
+        $uid = (int) $this->request->post('uid', 100001);
+        $aUser = Db::name('users')->where(['id' => $uid])->find();
+        if (!$aUser) {
+            return $this->error('用户不存在。。');
+        }
+        $aLastWish = Db::name('wish')->where(['uid' => $uid, 'status' => 1])->find();
+        if (!$aLastWish) {
+            return $this->error('正在进行的愿望不存在请先创建。。');
+        }
+        $wishId = $aLastWish['id'];
+        $aData['u_name'] = $aUser['username'];
+        $aData['head_img'] = $aUser['head_img_url'];       
+        $aData['login_date'] = date('Y-m-d', $aLastWish['create_time']);
+        $aData = array_merge($aData,$this->_getWishBaseInfo($wishId));        
+        //祈福磅单
+        $aQifuList = Db::name('wish_blessing')->where(['wish_id'=>$wishId])->field('sum(fudai_shus) as fudai_nums,id,uid')->group('uid')->order('fudai_nums desc')->select();
+        foreach($aQifuList as &$aFu){
+            $aUser = Db::name('users')->find($aFu['uid']);
+            $aFu['u_name'] = $aUser['username'];
+            $aFu['head_img'] = $aUser['head_img_url'];            
+        }
+        $aData['u_list'] = $aQifuList;
+        $aData['now_qifu_nums'] = Db::name('wish_blessing')->count();
+        $aData['this_wish_qifu_nums'] = Db::name('wish_blessing')->where(['wish_id'=>$wishId])->count();
+        $this->success('获取成功 ：shengcun_nums 已经生存天数 qifu_nums 祈福数量 fudai_nums 福袋数量, now_qifu_nums 当前祈福人数 this_wish_qifu_nums 已有祈福人数', '', $aData);
     }
 
 }

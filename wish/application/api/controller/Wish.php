@@ -24,10 +24,10 @@ class Wish extends BaseController {
             return $this->error('愿望为空');
         }
         foreach($aWishList as &$aWish){
-            $aWish['fudai_shu'] = 10;
-            $aUser = Db::name('user_open_binds')->where(['user_id'=>$aWish['uid']])->find();
-            $aWish['username'] = $aUser['open_nickname'];
-            $aWish['img_url'] = $aUser['open_head'];
+            $aWish['fudai_shu'] = UserService::getWishFudaiNums($aWish['id']);
+            $aUser = Db::name('users')->where(['id'=>$aWish['uid']])->find();
+            $aWish['username'] = $aUser['username'];
+            $aWish['img_url'] = $aUser['head_img_url'];
             $aWish['info'] = UserService::getWishNeedMoneyInfo($aWish['id']);
         }        
         $this->success('获取成功 星球星愿列表', '', $aWishList);
