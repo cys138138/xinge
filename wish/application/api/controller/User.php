@@ -375,13 +375,13 @@ class User extends BaseController {
         $aLastWish = Db::name('wish')->where(['id' => $wishId, 'status' => 1])->find();
         $aUser = Db::name('users')->where(['id' => $uid])->find();
         $aData['u_name'] = $aUser['username'];
-        $aData['head_img'] = $aUser['head_img_url'];        
+        $aData['head_img'] = $aUser['head_img_url'];
         $aData['login_date'] = date('Y-m-d', $aLastWish['create_time']);
-        $aData = array_merge($aData,$this->_getWishBaseInfo($wishId));
+        $aData = array_merge($aData, $this->_getWishBaseInfo($wishId));
         $this->success('获取成功 ：shengcun_nums 已经生存天数 qifu_nums 祈福数量 fudai_nums 福袋数量', '', $aData);
     }
-    
-    private function _getWishBaseInfo($wishId){
+
+    private function _getWishBaseInfo($wishId) {
         $aData['shengcun_nums'] = (int) UserService::getWishTotalDay($wishId);
         $aData['qifu_nums'] = (int) UserService::getWishQifuNums($wishId);
         $aData['fudai_nums'] = (int) UserService::getWishFudaiNums($wishId);
@@ -406,20 +406,54 @@ class User extends BaseController {
         }
         $wishId = $aLastWish['id'];
         $aData['u_name'] = $aUser['username'];
-        $aData['head_img'] = $aUser['head_img_url'];       
+        $aData['head_img'] = $aUser['head_img_url'];
         $aData['login_date'] = date('Y-m-d', $aLastWish['create_time']);
-        $aData = array_merge($aData,$this->_getWishBaseInfo($wishId));        
+        $aData = array_merge($aData, $this->_getWishBaseInfo($wishId));
         //祈福磅单
-        $aQifuList = Db::name('wish_blessing')->where(['wish_id'=>$wishId])->field('sum(fudai_shus) as fudai_nums,id,uid')->group('uid')->order('fudai_nums desc')->select();
-        foreach($aQifuList as &$aFu){
+        $aQifuList = Db::name('wish_blessing')->where(['wish_id' => $wishId])->field('sum(fudai_shus) as fudai_nums,id,uid')->group('uid')->order('fudai_nums desc')->select();
+        foreach ($aQifuList as &$aFu) {
             $aUser = Db::name('users')->find($aFu['uid']);
             $aFu['u_name'] = $aUser['username'];
-            $aFu['head_img'] = $aUser['head_img_url'];            
+            $aFu['head_img'] = $aUser['head_img_url'];
         }
         $aData['u_list'] = $aQifuList;
         $aData['now_qifu_nums'] = Db::name('wish_blessing')->count();
-        $aData['this_wish_qifu_nums'] = Db::name('wish_blessing')->where(['wish_id'=>$wishId])->count();
+        $aData['this_wish_qifu_nums'] = Db::name('wish_blessing')->where(['wish_id' => $wishId])->count();
         $this->success('获取成功 ：shengcun_nums 已经生存天数 qifu_nums 祈福数量 fudai_nums 福袋数量, now_qifu_nums 当前祈福人数 this_wish_qifu_nums 已有祈福人数', '', $aData);
+    }
+
+    /**
+     * 给他人愿望祈福
+     * @return type
+     */
+    public function qifu() {
+        //当前登录的用户id
+        $uid = (int) $this->request->post('uid', 100001);
+        $wishId = (int) $this->request->post('wish_id', 4);
+        $aUser = Db::name('users')->where(['id' => $uid])->find();
+        if (!$aUser) {
+            return $this->error('用户不存在。。');
+        }
+        $aLastWish = Db::name('wish')->where(['id' => $wishId, 'status' => 1])->find();
+        if (!$aLastWish) {
+            return $this->error('正在进行的愿望不存在。。');
+        }
+        $todayIsQifu = Db::name('wish_blessing')->where(['wish_id' => $wishId, 'uid' => $uid,'q_date'=>date('Ymd')])->count();
+        if ($todayIsQifu) {
+            return $this->error('今天已经祈福过了，请明日再祈福');
+        }
+        $fudai_shus = mt_rand(1, 10);
+        Db::name('wish_blessing')->insertGetId([
+            'wish_id' => $wishId,
+            'uid' => $uid,
+            'wish_uid' => $aLastWish['uid'],
+            'creat_time' => NOW_TIME,
+            'q_date' => date('Ymd'),
+            'fudai_shus' => $fudai_shus
+        ]);
+        $this->success('祈福成功', '', [
+            'fudaishu' => $fudai_shus,
+        ]);
     }
 
 }
