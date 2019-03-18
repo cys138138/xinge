@@ -482,6 +482,7 @@ class User extends BaseController {
 
     public function quitWish() {
         $uid = (int) $this->request->post('uid', 100001);
+        $bingId = (int) $this->request->post('bind_id', 1);
         $aUser = Db::name('users')->find($uid);
         if (!$aUser) {
             return $this->error('用户不存在');
@@ -489,6 +490,10 @@ class User extends BaseController {
         $aLastWish = Db::name('wish')->where(['uid' => $uid, 'status' => 1])->find();
         if (!$aLastWish) {
             return $this->error('没有可退出的愿望。。');
+        }
+        $aBind = Db::name('user_alipay_bank')->where(['uid' => $uid, 'id' => $bingId])->find();
+        if (!$aBind) {
+            return $this->error('请先绑定，银行卡或者支付不宝');
         }
         //开启事务处理
         Db::startTrans();
@@ -506,6 +511,10 @@ class User extends BaseController {
                     'status' => 0,
                     'date' => date('Ym'),
                     'create_time' => NOW_TIME,
+                    'pay_account' => $aBind['account'],
+                    'pay_name' => $aBind['true_name'],
+                    'type' => $aBind['type'],
+                    'bank_name' => $aBind['bank_name'] ? $aBind['bank_name'] : '',
                 ]);
                 Db::name('wish_order_log')->insertGetId([
                     'remark' => '愿望退出提现',
