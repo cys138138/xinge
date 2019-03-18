@@ -54,6 +54,7 @@ class Withdrawal extends BasicAdmin {
         $db->field('app_withdrawal.*,ub.open_nickname,su.username as suname');
         $db->leftJoin('user_open_binds ub', 'ub.user_id = app_withdrawal.uid');
         $db->leftJoin('system_user su', 'su.id = app_withdrawal.opt_uid');
+        $db->order('create_time desc');
         return $db;
     }
 

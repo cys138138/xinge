@@ -89,6 +89,8 @@
                 <th class='text-left'>金额</th>
                  <th class='text-left'>处理提现的人</th>
                 <th class='text-left'>状态</th>
+                <th class='text-left'>账号类型</th>
+                <th class='text-left'>开户行</th>
                 <th class='text-left'>真实姓名</th>
                 <th class='text-left'>申请的账户</th>
                 
@@ -119,6 +121,14 @@
                     {elseif $vo.status eq 2}<span style="color: red">提现失败</span>              
                     {/if}
                 </td>
+                            
+                <td class='text-left'>
+                    {if $vo.type eq 1}<span style="color: red">支付宝</span>
+                {elseif $vo.type eq 2}<span  style="color: green">银行卡</span>          
+                {/if}    
+                    
+                </td>
+                <td class='text-left'>{$vo.bank_name}</td>
                 <td class='text-left'>{$vo.pay_name}</td>
                 <td class='text-left'>{$vo.pay_account}</td>
                 
