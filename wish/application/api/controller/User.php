@@ -426,6 +426,7 @@ class User extends BaseController {
             $aFu['head_img'] = $aUser['head_img_url'];
         }
         $aData['u_list'] = $aQifuList;
+        $aData['wish_id'] = $wishId;
         $aData['now_qifu_nums'] = Db::name('wish_blessing')->count();
         $aData['this_wish_qifu_nums'] = Db::name('wish_blessing')->where(['wish_id' => $wishId])->count();
         $this->success('获取成功 ：shengcun_nums 已经生存天数 qifu_nums 祈福数量 fudai_nums 福袋数量, now_qifu_nums 当前祈福人数 this_wish_qifu_nums 已有祈福人数', '', $aData);
@@ -522,10 +523,20 @@ class User extends BaseController {
         }
         return $this->success('退出成功');
     }
-    
+
     public function getBankList() {
         $aList = Db::name('bank')->order('sort asc,id asc')->select();
         $this->success('获取成功', '', $aList);
+    }
+
+    public function getBindAcountList() {
+        $uid = (int) $this->request->post('uid', 100001);
+        $aUser = Db::name('users')->where(['id' => $uid])->find();
+        if (!$aUser) {
+            return $this->error('用户不存在。。');
+        }
+        $aInfo = Db::name('user_alipay_bank')->where(['uid' => $uid])->select();
+        $this->success('获取银行卡支付宝信息成功', '', $aInfo);
     }
 
     public function bindAcount() {
