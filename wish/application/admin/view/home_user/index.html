@@ -2,12 +2,6 @@
 
 {block name="button"}
 
-    {if auth("$classuri/shareauth")}
-        <button data-update data-field='is_have_share_auth' data-action='{:url("$classuri/shareauth")}' data-value="1" class='layui-btn layui-btn-sm layui-btn-danger'>批量设置分享权限</button>
-    {/if}
-    {if auth("$classuri/shareauth")}
-    <button data-update data-field='is_have_share_auth' data-action='{:url("$classuri/shareauth")}'  data-value="0" class='layui-btn layui-btn-sm layui-btn-danger'>批量删除分享权限</button>
-    {/if}
 {/block}
 
 {/block}
@@ -47,12 +41,7 @@
              <script>window.laydate.render({range: true, elem: "#createtime"});</script>
         </div>
     </div>
-    <div class="layui-form-item layui-inline">
-        <label class="layui-form-label">账户余额</label>
-        <div class="layui-input-inline">
-            <input name="money" value="{$Think.get.money|default=''}" placeholder="请输入账户余额" class="layui-input">
-        </div>
-    </div>
+
     <div class="layui-form-item layui-inline">
         <button class="layui-btn layui-btn-primary"><i class="layui-icon">&#xe615;</i> 搜 索</button>
     </div>    
