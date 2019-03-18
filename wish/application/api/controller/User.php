@@ -79,7 +79,7 @@ class User extends BaseController {
             $this->error('用户不存在');
         }
         unset($aUser['password']);
-        $this->success('获取成功',null,$aUser);
+        $this->success('获取成功', null, $aUser);
     }
 
     /**
@@ -447,7 +447,7 @@ class User extends BaseController {
         if (!$aLastWish) {
             return $this->error('正在进行的愿望不存在。。');
         }
-        $todayIsQifu = Db::name('wish_blessing')->where(['wish_id' => $wishId, 'uid' => $uid,'q_date'=>date('Ymd')])->count();
+        $todayIsQifu = Db::name('wish_blessing')->where(['wish_id' => $wishId, 'uid' => $uid, 'q_date' => date('Ymd')])->count();
         if ($todayIsQifu) {
             return $this->error('今天已经祈福过了，请明日再祈福');
         }
@@ -464,6 +464,49 @@ class User extends BaseController {
             'fudaishu' => $fudai_shus,
         ]);
     }
-    
+
+    public function quitWish() {
+        $uid = (int) $this->request->post('uid', 100001);
+        $aUser = Db::name('users')->find($uid);
+        if (!$aUser) {
+            return $this->error('用户不存在');
+        }
+        $aLastWish = Db::name('wish')->where(['uid' => $uid, 'status' => 1])->find();
+        if (!$aLastWish) {
+            return $this->error('没有可退出的愿望。。');
+        }
+        //开启事务处理
+        Db::startTrans();
+        try {
+            Db::name('wish')->where(['id' => $aLastWish['id']])->update([
+                'quit_time' => NOW_TIME,
+                'status' => 3,
+            ]);
+            //统计所需要退回的钱
+            $backMoney = Db::name('wish_order')->where(['wish_id' => $aLastWish['id']])->sum('money');
+            if ($backMoney > 0) {
+                Db::name('app_withdrawal')->insert([
+                    'uid' => $uid,
+                    'money' => $backMoney,
+                    'status' => 0,
+                    'date' => date('Ym'),
+                    'create_time' => NOW_TIME,
+                ]);
+                Db::name('wish_order_log')->insertGetId([
+                    'remark' => '愿望退出提现',
+                    'create_time' => NOW_TIME,
+                    'type' => 2,
+                    'money' => $backMoney,
+                    'uid' => $uid,
+                ]);
+            }
+            Db::commit();
+        } catch (Exception $e) {
+            // 回滚事务
+            Db::rollback();
+            return $this->error('退出失败');
+        }
+        return $this->success('退出成功');
+    }
 
 }
