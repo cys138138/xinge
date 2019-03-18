@@ -20,7 +20,7 @@ class Notice extends \controller\BasicAdmin {
      * 列表
      */
     public function index() {
-        $this->title = '公告列表';
+        $this->title = '列表';
 
         list($get, $db) = [$this->request->get(), Db::name($this->table)];
         (isset($get["title"]) && $get["title"] !== '') && $db->whereLike("title", "%{$get["title"]}%");
