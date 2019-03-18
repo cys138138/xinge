@@ -465,6 +465,20 @@ class User extends BaseController {
         ]);
     }
 
+    public function getOrderList() {
+        $uid = (int) $this->request->post('uid', 100001);
+        $page = $this->request->get('page', 1);
+        $pageSize = $this->request->get('page_size', 1000);
+        $list = Db::name('wish_order_log')->where(['uid' => $uid])->order('create_time desc')->page($page, $pageSize)->select();
+        if (!$list) {
+            return $this->error('订单为空');
+        }
+        foreach ($list as &$val) {
+            $val['date'] = date('Y-m-d H:i:s', $val['create_time']);
+        }
+        return $this->success('获取订单列表成功 type 等于 1 表示加钱 type 等于2 表示减钱', '', $list);
+    }
+
     public function quitWish() {
         $uid = (int) $this->request->post('uid', 100001);
         $aUser = Db::name('users')->find($uid);
@@ -507,6 +521,53 @@ class User extends BaseController {
             return $this->error('退出失败');
         }
         return $this->success('退出成功');
+    }
+    
+    public function getBankList() {
+        $aList = Db::name('bank')->order('sort asc,id asc')->select();
+        $this->success('获取成功', '', $aList);
+    }
+
+    public function bindAcount() {
+        $uid = (int) $this->request->post('uid', 100001);
+        $account = $this->request->post('account', 'xxx@qq.com');
+        $type = $this->request->post('type', 1);
+        $true_name = $this->request->post('true_name', '尚公子');
+        //开户行
+        $bankId = (int) $this->request->post('bank_id', 0);
+        $aUser = Db::name('users')->where(['id' => $uid])->find();
+        if (!$aUser) {
+            return $this->error('用户不存在。。');
+        }
+        if ($type == 2 && !$bankId) {
+            return $this->error('选择银行卡类型开户行必填');
+        }
+        $bankName = '';
+        if ($type == 2) {
+            $aBank = Db::name('bank')->find($bankId);
+            $bankName = $aBank['name'];
+        }
+        $aInfo = Db::name('user_alipay_bank')->where(['uid' => $uid, 'type' => $type])->find();
+        if (!$aInfo) {
+            Db::name('user_alipay_bank')->insertGetId([
+                'uid' => $uid,
+                'account' => $account,
+                'true_name' => $true_name,
+                'type' => $type,
+                'create_time' => NOW_TIME,
+                'bank_id' => $bankId,
+                'bank_name' => $bankName,
+            ]);
+        } else {
+            Db::name('user_alipay_bank')->where(['id' => $aInfo['id']])->update([
+                'account' => $account,
+                'true_name' => $true_name,
+                'update_time' => NOW_TIME,
+                'bank_id' => $bankId,
+                'bank_name' => $bankName,
+            ]);
+        }
+        return $this->success('保存成功');
     }
 
 }
