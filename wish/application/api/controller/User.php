@@ -70,7 +70,16 @@ class User extends BaseController {
     }
 
     public function getUserBaseInfo() {
-        
+        $uid = (int) $this->request->post('uid', 4);
+        if (!$uid) {
+            $this->error('用户id必填');
+        }
+        $aUser = Db::name('users')->where(['id' => $uid])->find();
+        if (!$aUser) {
+            $this->error('用户不存在');
+        }
+        unset($aUser['password']);
+        $this->success('获取成功',null,$aUser);
     }
 
     /**
@@ -455,5 +464,6 @@ class User extends BaseController {
             'fudaishu' => $fudai_shus,
         ]);
     }
+    
 
 }
