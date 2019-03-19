@@ -173,7 +173,7 @@ class User extends BaseController {
      * 获取用户推广二维码
      */
     public function getUserQr() {
-        $userId = (int) $this->request->get('uid', 0);
+        $userId = (int) $this->request->get('uid', 100002);
         if (!$userId) {
             $this->error('uid缺失');
         }
@@ -183,9 +183,6 @@ class User extends BaseController {
         }
         $aUserInfo = Db::name('user_open_binds')->where(['user_id' => $userId])->find();
         $aUser = Db::name('users')->where(['id' => $userId])->find();
-        if (!$aUser['is_have_share_auth']) {
-            $this->error('你所在的等级不能分享');
-        }
         if ($aUserInfo['share_wx_app_qr_img']) {
             //$this->success('获取二维码成功', null, ['img_url' => $aUserInfo['share_wx_app_qr_img']]);
         }
@@ -193,7 +190,7 @@ class User extends BaseController {
         $tag = false;
         $url = '';
         try {
-            $content = $mini->createMiniScene('share_' . $userId, 'pages/start/start');
+            $content = $mini->createMiniScene('share_' . $userId, 'pages/index/index');
             $savePath = UserService::getQrShareKey($userId) . '_' . NOW_TIME;
             $result = FileService::save($savePath, $content);
             if (isset($result['url']) && $result['url']) {
@@ -212,6 +209,7 @@ class User extends BaseController {
         }
         $this->success('获取生成二维码成功', null, ['img_url' => $url]);
     }
+    
 
     /**
      * 获取我邀请的人
@@ -382,11 +380,11 @@ class User extends BaseController {
         $wishId = (int) $this->request->post('wish_id', 0);
         $uid = (int) $this->request->post('uid', 0);
         $aLastWish = Db::name('wish')->where(['id' => $wishId, 'status' => 1])->find();
-        $aUser = Db::name('users')->where(['id' => $aLastWish['uid']])->find();
-        $aData['u_name'] = $aUser['username'];
+        $aUser = Db::name('users')->where(['id' => $aLastWish['uid']])->find();        
         $aData['head_img'] = $aUser['head_img_url'];
         $aData['login_date'] = date('Y-m-d', $aLastWish['create_time']);
         $aData = array_merge($aData, $this->_getWishBaseInfo($wishId));
+        $aData['u_name'] = $aUser['username'];
         $this->success('获取成功 ：shengcun_nums 已经生存天数 qifu_nums 祈福数量 fudai_nums 福袋数量', '', $aData);
     }
 
