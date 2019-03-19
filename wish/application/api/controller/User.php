@@ -378,7 +378,7 @@ class User extends BaseController {
      */
     public function getMyWishInfo() {
         $wishId = (int) $this->request->post('wish_id', 0);
-        $uid = (int) $this->request->post('uid', 100002);
+        $uid = (int) $this->request->post('uid', 0);
         if (!$wishId) {
             $aLastWish = Db::name('wish')->where(['uid' => $uid, 'status' => 1])->find();
             if (!$aLastWish) {
