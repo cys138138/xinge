@@ -16,7 +16,7 @@ class UserService {
         $aLastWish = Db::name('wish')->where(['id' => $wishId, 'status' => 1])->find();
         $diffTime = (NOW_TIME - $aLastWish['create_time']);
         if($diffTime / $todayS < 1){
-            return 1;
+            return 0;
         }
         $diffDay = intval($diffTime / $todayS);
         return $diffDay;

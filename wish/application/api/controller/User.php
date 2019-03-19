@@ -384,6 +384,7 @@ class User extends BaseController {
             if (!$aLastWish) {
                 return $this->error('愿望不存在，请先创建愿望');
             }
+            $wishId = $aLastWish['id'];
         } else {
             $aLastWish = Db::name('wish')->where(['id' => $wishId, 'status' => 1])->find();
             $uid = $aLastWish['uid'];
