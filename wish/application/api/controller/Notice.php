@@ -37,7 +37,7 @@ class Notice extends BaseController {
     public function getGuize(){        
         $aData = Db::name('art_notice')->where(['status' => 1, 'is_deleted' => 0])->find();
         $aData['create_time'] = date('Y-m-d H:i:s',$aData['create_time']);
-        $aData['desc'] = htmlspecialchars_decode($aData['desc']);
+        $aData['content'] = htmlspecialchars_decode($aData['content']);
         return $this->success('获取规则成功', null, $aData);
     }
     
