@@ -378,7 +378,7 @@ class User extends BaseController {
      */
     public function getMyWishInfo() {
         $wishId = (int) $this->request->post('wish_id', 0);
-        $uid = (int) $this->request->post('uid', 0);
+        $uid = (int) $this->request->post('uid', 100002);
         if (!$wishId) {
             $aLastWish = Db::name('wish')->where(['uid' => $uid, 'status' => 1])->find();
             if (!$aLastWish) {
@@ -390,6 +390,7 @@ class User extends BaseController {
         }
         $aUser = Db::name('users')->where(['id' => $uid])->find();
         $aData['head_img'] = $aUser['head_img_url'];
+        $aData['wish_id'] = $wishId;
         $aData['login_date'] = date('Y-m-d', $aLastWish['create_time']);
         $aData = array_merge($aData, $this->_getWishBaseInfo($wishId));
         $aData['u_name'] = $aUser['username'];
