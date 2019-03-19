@@ -14,7 +14,11 @@ class UserService {
     public static function getWishTotalDay($wishId) {
         $todayS = 60 * 60 * 24;
         $aLastWish = Db::name('wish')->where(['id' => $wishId, 'status' => 1])->find();
-        $diffDay = intval((NOW_TIME - $aLastWish['create_time']) / $todayS);
+        $diffTime = (NOW_TIME - $aLastWish['create_time']);
+        if($diffTime / $todayS < 1){
+            return 1;
+        }
+        $diffDay = intval($diffTime / $todayS);
         return $diffDay;
     }
     public static function getWishNumber($wishId) {
