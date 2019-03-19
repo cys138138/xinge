@@ -6,6 +6,7 @@ use app\api\lib\BaseController;
 use app\api\lib\WxappConfig;
 use app\api\service\JuheMessage;
 use app\api\service\UserService;
+use Endroid\QrCode\QrCode as QrC;
 use Exception;
 use service\FileService;
 use think\Db;
@@ -406,6 +407,104 @@ class User extends BaseController {
         $aWishInfo = UserService::getWishNeedMoneyInfo($wishId);
         $aData['need_jianchi_day'] = $aWishInfo['back_total_nums'];
         return $aData;
+    }
+    
+    public function getShareImage(){        
+        $wishId = (int)$this->request->post('wish_id',11);
+        $aLastWish = Db::name('wish')->where(['id' => $wishId])->find();
+        if(!$aLastWish){
+            $this->error("梦想暂时不见了..");
+        }
+        $aUser = Db::name('users')->where(['id' => $aLastWish['uid']])->find();
+        if(!$aUser){
+            $this->error("梦想人暂时不见了..");
+        }
+        $aData = $this->_getWishBaseInfo($wishId);
+        $posX = 136;
+        $posY = 736;        
+        $w = 116;
+        $h = 118;
+        $shengcuntianshu = $aData['shengcun_nums'];
+        $qifurenshu = $aData['qifu_nums'];
+        $fudaishu = $aData['fudai_nums'];
+        $number = $aLastWish['number'];
+        $uname = $aUser['username'];
+        $date = date('Y.m.d',$aLastWish['create_time']);
+        $tian = $aData['need_jianchi_day'].'/天';
+        
+        $qrCode = new QrC();
+        $qrCode->setText('http://wish.xingyuanxingqiu.com')->setSize(110)->setPadding(8)->setImageType(QrC::IMAGE_TYPE_PNG);
+        
+//        $qrcodeImg = imagecreatefromstring(file_get_contents('E:\workSpace\Xin\xinge\wish\oQ6yH5OmCz20HT1tAyF7dUXxnhjM.jpg'));
+        $qrcodeImg = $qrCode->getImage();
+        $bigImg = imagecreatefromstring(file_get_contents(APP_PATH.'/../bg2.png'));
+        
+        $black = imagecolorallocate($bigImg, 250, 250, 255);//字体颜色
+        $font = APP_PATH.'/../Arial.ttf';//字体路径
+        $font2 = APP_PATH.'/../bista.ttf';//字体路径
+        imagefttext($bigImg, 48, 0, 80, 340, $black, $font, $shengcuntianshu);
+        imagefttext($bigImg, 48, 0, 300, 340, $black, $font, $qifurenshu);
+        imagefttext($bigImg, 48, 0, 500, 340, $black, $font, $fudaishu);
+        imagefttext($bigImg, 14, 0, 350, 484, $black, $font, $number);
+        $black2 = imagecolorallocate($bigImg, 102, 87, 72);//字体颜色
+        imagefttext($bigImg, 20, 0, 390, 760, $black2, $font2, $uname);
+        imagefttext($bigImg, 20, 0, 400, 806, $black2, $font2, $date);
+        imagefttext($bigImg, 20, 0, 420, 843, $black2, $font2, $tian);
+        
+        imagecopymerge($bigImg, $qrcodeImg, $posX, $posY, 0, 0, $w, $h, 100);
+                $avater = APP_PATH.'/../132.jpg';
+        $avater = $this->yuanjiao($avater);
+        imagecopymerge($bigImg, $avater, 275, 551, 0, 0, 144, 157, 100);
+        header('Content-type:image/png');   
+        imagepng($bigImg);die;
+             
+    }
+    
+    public function imagecopymerge_alpha($dst_im, $src_im, $dst_x, $dst_y, $src_x, $src_y, $src_w, $src_h, $pct) {
+        $opacity = $pct;
+        $w = imagesx($src_im);
+        $h = imagesy($src_im);
+        $cut = imagecreatetruecolor($src_w, $src_h);
+        imagecopy($cut, $dst_im, 0, 0, $dst_x, $dst_y, $src_w, $src_h);
+        $opacity = 100 - $opacity;
+        imagecopy($cut, $src_im, 0, 0, $src_x, $src_y, $src_w, $src_h);
+        imagecopymerge($dst_im, $cut, $dst_x, $dst_y, $src_x, $src_y, $src_w, $src_h, $opacity);
+    }
+
+    public function yuanjiao($imgpath) {
+        $src_img = null;
+        $ext = pathinfo($imgpath);
+        switch ($ext['extension']) {
+            case'jpg':
+                $src_img = imagecreatefromjpeg($imgpath);
+                break;
+            case'png':
+                $src_img = imagecreatefrompng($imgpath);
+                break;
+        }
+        $wh = getimagesize($imgpath);
+        $w = $wh[0];
+        $h = $wh[1];
+        $w = min([$w, $h]);
+        $h = $w;
+        $img = imagecreatetruecolor($w, $h);
+        //这一句一定要有
+        imagesavealpha($img, true);
+        //拾取一个完全透明的颜色,最后一个参数127为全透明
+        $bg = imagecolorallocatealpha($img, 255, 255, 255, 127);
+        imagefill($img, 0, 0, $bg);
+        $r = $w / 2; //圆半径
+        $y_x = $r; //圆心X坐标
+        $y_y = $r; //圆心Y坐标
+        for ($x = 0; $x < $w; $x++) {
+            for ($y = 0; $y < $h; $y++) {
+                $rgbColor = imagecolorat($src_img, $x, $y);
+                if (((($x - $r) * ($x - $r) + ($y - $r) * ($y - $r)) < ($r * $r))) {
+                    imagesetpixel($img, $x, $y, $rgbColor);
+                }
+            }
+        }
+        return $img;
     }
 
     /**
