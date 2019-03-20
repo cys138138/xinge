@@ -742,6 +742,7 @@ class User extends BaseController {
             'total_fee' => (int) ($money * 100), //金额转成分
             'openid' => $aUserInfo['openid'],
             'trade_type' => 'JSAPI',
+            'attach' => $wishId,
             'notify_url' => url('@api/Notify/payCallback', '', true, true),
                 //'spbill_create_ip' => '127.0.0.1',
         ];
