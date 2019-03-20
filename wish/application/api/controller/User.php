@@ -410,7 +410,7 @@ class User extends BaseController {
     }
     
     public function getShareImage(){        
-        $wishId = (int)$this->request->post('wish_id',11);
+        $wishId = (int)$this->request->post('wish_id',10);
         $aLastWish = Db::name('wish')->where(['id' => $wishId])->find();
         if(!$aLastWish){
             $this->error("梦想暂时不见了..");
@@ -429,15 +429,17 @@ class User extends BaseController {
         $fudaishu = $aData['fudai_nums'];
         $number = $aLastWish['number'];
         $uname = $aUser['username'];
+		$heading = $aUser['head_img_url'] ? $aUser['head_img_url'] : APP_PATH.'/../132.png';
         $date = date('Y.m.d',$aLastWish['create_time']);
         $tian = $aData['need_jianchi_day'].'/天';
         
         $qrCode = new QrC();
         $qrCode->setText('http://wish.xingyuanxingqiu.com')->setSize(110)->setPadding(8)->setImageType(QrC::IMAGE_TYPE_PNG);
         
-//        $qrcodeImg = imagecreatefromstring(file_get_contents('E:\workSpace\Xin\xinge\wish\oQ6yH5OmCz20HT1tAyF7dUXxnhjM.jpg'));
         $qrcodeImg = $qrCode->getImage();
-        $bigImg = imagecreatefromstring(file_get_contents(APP_PATH.'/../bg2.png'));
+		
+		$bgImgUrl = APP_PATH.'/../bg3.png';
+        $bigImg = imagecreatefrompng($bgImgUrl);
         
         $black = imagecolorallocate($bigImg, 250, 250, 255);//字体颜色
         $font = APP_PATH.'/../Arial.ttf';//字体路径
@@ -450,25 +452,37 @@ class User extends BaseController {
         imagefttext($bigImg, 20, 0, 390, 760, $black2, $font2, $uname);
         imagefttext($bigImg, 20, 0, 400, 806, $black2, $font2, $date);
         imagefttext($bigImg, 20, 0, 420, 843, $black2, $font2, $tian);
-        
-        imagecopymerge($bigImg, $qrcodeImg, $posX, $posY, 0, 0, $w, $h, 100);
-                $avater = APP_PATH.'/../132.jpg';
-        $avater = $this->yuanjiao($avater);
-        imagecopymerge($bigImg, $avater, 275, 551, 0, 0, 144, 157, 100);
-        header('Content-type:image/png');   
-        imagepng($bigImg);die;
-             
-    }
-    
-    public function imagecopymerge_alpha($dst_im, $src_im, $dst_x, $dst_y, $src_x, $src_y, $src_w, $src_h, $pct) {
-        $opacity = $pct;
-        $w = imagesx($src_im);
-        $h = imagesy($src_im);
-        $cut = imagecreatetruecolor($src_w, $src_h);
-        imagecopy($cut, $dst_im, 0, 0, $dst_x, $dst_y, $src_w, $src_h);
-        $opacity = 100 - $opacity;
-        imagecopy($cut, $src_im, 0, 0, $src_x, $src_y, $src_w, $src_h);
-        imagecopymerge($dst_im, $cut, $dst_x, $dst_y, $src_x, $src_y, $src_w, $src_h, $opacity);
+		$imageSize = getimagesize($bgImgUrl);
+		$baseImg = imagecreatetruecolor($imageSize[0], $imageSize[1]); 
+		//2.上色 
+		$color=imagecolorallocate($baseImg,255,0,0); 
+		
+		
+        imagecopymerge($baseImg, $bigImg, 0, 0, 0, 0, $imageSize[0], $imageSize[1], 100);
+		$avater = imagecreatefromstring(file_get_contents($heading));
+		$wAva = getimagesize($heading);
+		$w11 = $wAva[0];
+        $h11 = $wAva[1];
+		//画圆弧
+        imagearc($avater, $w11/2, $h11/2, $w11, $h11, 0, 360, $color);
+        imagefilltoborder($avater, 0, 0, $color, $color); 
+        imagefilltoborder($avater, $w, 0, $color, $color); 
+        imagefilltoborder($avater, 0, $h11, $color, $color); 
+        imagefilltoborder($avater, $w11, $h11, $color, $color);
+		//将$color 设置成透明
+		imagecolortransparent($avater,$color); 
+		imagefill($avater,0,0,$color);
+		
+		imagecopymerge($baseImg, $avater, 275, 560, 0, 0, $wAva[0], $wAva[1], 100);
+		imagecolortransparent($baseImg,$color); 
+		imagefill($baseImg,0,0,$color);
+		imagecopymerge($baseImg, $qrcodeImg, $posX, $posY, 0, 0, $w, $h, 100);
+		//3.输出之前设置指定颜色透明 
+		imagecolortransparent($baseImg,$color); 
+		imagefill($baseImg,0,0,$color);
+		
+		header('Content-type:image/png');   
+        imagepng($baseImg);die;             
     }
 
     public function yuanjiao($imgpath) {
