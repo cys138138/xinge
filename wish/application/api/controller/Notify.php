@@ -51,8 +51,26 @@ class Notify extends BaseController {
         try {
             //1.设置当前订单状态
             OrderService::setSuccessOrder($orderSn);
-            //2. 给添加用户金额
-            UserService::addUserMoney($aOrder['uid'], $aOrder['money'], 4, '充值');
+            $money = $aInput['total_fee'] / 100; //订单金额
+            //多份情况
+            $wishId = isset($aInput['attach']) ? $aInput['attach'] : 0;
+            $aLastWish = Db::name('wish')->where(['id' => $wishId])->find();
+            if($aLastWish){
+                Db::name('wish_order_log')->insert([
+                    'remark' => '',
+                    'create_time' => NOW_TIME,
+                    'type' => 1,
+                    'uid' => $aLastWish['uid'],
+                    'money' => $money,
+                ]);
+                Db::name('wish_order')->insert([
+                    'wish_id' => $wishId,
+                    'remark' => '私有燃料购买',
+                    'create_time' => NOW_TIME,
+                    'uid' => $aLastWish['uid'],
+                    'money' => $money,
+                ]);
+            }
             Db::commit();
             return $this->returnMessage(1);
         } catch (Exception $e) {
