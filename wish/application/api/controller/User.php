@@ -410,7 +410,7 @@ class User extends BaseController {
     }
     
     public function getShareImage(){        
-        $wishId = (int)$this->request->post('wish_id',10);
+        $wishId = (int)$this->request->get('wish_id',10);
         $aLastWish = Db::name('wish')->where(['id' => $wishId])->find();
         if(!$aLastWish){
             $this->error("梦想暂时不见了..");
