@@ -318,6 +318,7 @@ class User extends BaseController {
             return $this->error('愿望实现，开启新的愿望吧');
         }
         $aData = UserService::getWishNeedMoneyInfo($aWish['id']);
+	$aData['wish_id'] = $aWish['id'];
         $this->success('获取成功 ：total_day_nums 已经生存天数 total_nums 总共存了多少桶 today_need_money 今天需要存的桶数 back_total_nums 还需要几天返回', '', $aData);
     }
 
