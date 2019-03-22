@@ -422,6 +422,9 @@ class User extends BaseController {
         if(!$aUser){
             $this->error("梦想人暂时不见了..");
         }
+	    if($aLastWish['status'] != 1){
+		    $this->error("梦想状态不可分享..");
+	    }
         $aData = $this->_getWishBaseInfo($wishId);
         $posX = 136;
         $posY = 736;        
