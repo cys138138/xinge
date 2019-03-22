@@ -340,20 +340,20 @@ class User extends BaseController {
             return $this->error('愿望名称必填');
         }
         if (!$target_money) {
-            return $this->error('目标金额必填');
+            return $this->error('愿望目标必填');
         }
         if (!$target_type) {
-            return $this->error('愿望时间单位必选');
+            return $this->error('时间节点必选');
         }
         if (!$one_money) {
             return $this->error('愿望时间单位必填');
         }
 
         if ($target_money < 1) {
-            return $this->error('目标金额必须大于1元');
+            return $this->error('愿望目标必须大于1元');
         }
         if ($one_money < 1) {
-            return $this->error('目标单元金额必须大于1');
+            return $this->error('愿望金额必须大于1元');
         }
         $aWish = Db::name('wish')->where(['uid' => $userId, 'status' => 1])->find();
         if ($aWish) {
