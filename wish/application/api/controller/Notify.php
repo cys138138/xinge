@@ -57,7 +57,7 @@ class Notify extends BaseController {
             $aLastWish = Db::name('wish')->where(['id' => $wishId])->find();
             if($aLastWish){
                 Db::name('wish_order_log')->insert([
-                    'remark' => '',
+                    'remark' => '私有燃料购买',
                     'create_time' => NOW_TIME,
                     'type' => 1,
                     'uid' => $aLastWish['uid'],
