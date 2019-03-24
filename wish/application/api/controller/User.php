@@ -432,7 +432,7 @@ class User extends BaseController {
         
         $qrcodeImgUrl = static::getUserQr($aLastWish['uid']);
         
-       $qrcodeImg = $this->imgzip($qrcodeImgUrl, 132, 132);
+       $qrcodeImg = $this->imgzip($qrcodeImgUrl, 100, 100);
         
 //        $qrcodeImg = imagecreatefromstring(file_get_contents($qrcodeImgUrl));   
 		$bgImgUrl = APP_PATH.'/../bg3.png';
