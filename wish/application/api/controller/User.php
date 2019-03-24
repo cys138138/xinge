@@ -619,6 +619,7 @@ class User extends BaseController {
         //当前登录的用户id
         $uid = (int) $this->request->post('uid', 100001);
         $wishId = (int) $this->request->post('wish_id', 4);
+        $is_share = (int) $this->request->post('is_share', 0);
         $aUser = Db::name('users')->where(['id' => $uid])->find();
         if (!$aUser) {
             return $this->error('用户不存在。。');
@@ -638,7 +639,8 @@ class User extends BaseController {
             'wish_uid' => $aLastWish['uid'],
             'creat_time' => NOW_TIME,
             'q_date' => date('Ymd'),
-            'fudai_shus' => $fudai_shus
+            'fudai_shus' => $fudai_shus,
+            'is_share' => $is_share
         ]);
         $this->success('祈福成功', '', [
             'fudaishu' => $fudai_shus,
@@ -806,6 +808,19 @@ class User extends BaseController {
         $prepay = $wechat->createOrder($options);
         $result = $wechat->createParamsForJsApi($prepay['prepay_id']);
         return $this->success('获取成功', null, $result);
+    }
+    
+    public function setUserPidInfo() {
+        $uid = (int) $this->request->post('uid', 0);
+        $pid = $this->request->post('pid', '');
+        if (!$pid || !$uid) {
+            $this->error('分享人id 和用户id必填');
+        }
+        $aUserInfo = Db::name('users')->where(['id' => $uid])->find();
+        if (!$aUserInfo) {
+            $this->error('用户不存在');
+        }
+        return $this->success('ok');
     }
 
 }
