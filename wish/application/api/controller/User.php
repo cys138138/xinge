@@ -579,6 +579,38 @@ class User extends BaseController {
         $this->success('获取成功 ：shengcun_nums 已经生存天数 qifu_nums 祈福数量 fudai_nums 福袋数量, now_qifu_nums 当前祈福人数 this_wish_qifu_nums 已有祈福人数', '', $aData);
     }
 
+    
+        /**
+     * 获取公有愿望信息
+     */
+    public function getWishShareList() {
+        $uid = (int) $this->request->post('uid', 100001);
+        $aUser = Db::name('users')->where(['id' => $uid])->find();
+        if (!$aUser) {
+            return $this->error('用户不存在。。');
+        }
+        $aLastWish = Db::name('wish')->where(['uid' => $uid, 'status' => 1])->find();
+        if (!$aLastWish) {
+            return $this->error('正在进行的愿望不存在请先创建。。');
+        }
+        $wishId = $aLastWish['id'];
+        $aData['u_name'] = $aUser['username'];
+        $aData['head_img'] = $aUser['head_img_url'];
+        //祈福磅单
+        $aQifuList = Db::name('wish_blessing')->where(['wish_id' => $wishId, 'is_share' => 1])->field('sum(fudai_shus) as fudai_nums,id,uid')->group('uid')->order('fudai_nums desc')->select();
+        foreach ($aQifuList as &$aFu) {
+            $aUser = Db::name('users')->find($aFu['uid']);
+            $aFu['u_name'] = $aUser['username'];
+            $aFu['head_img'] = $aUser['head_img_url'];
+        }
+        $aData['u_list'] = $aQifuList;
+        $aData['wish_id'] = $wishId;
+        $aData['wish_title'] = $aLastWish['title'];
+        $aData['total_qifu_nums'] = Db::name('wish_blessing')->where(['wish_id' => $wishId, 'is_share' => 1])->sum('fudai_shus');
+        $aData['total_friend'] = Db::name('wish_blessing')->where(['wish_id' => $wishId, 'is_share' => 1])->group('uid')->count();
+        $this->success('获取成功 ：wish_title 愿望标题 total_qifu_nums 当前分享进来的祈福数量 total_friend 已收集好友数量', '', $aData);
+    }
+
     /**
      * 给他人愿望祈福
      * @return type
