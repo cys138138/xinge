@@ -175,19 +175,10 @@ class User extends BaseController {
     /**
      * 获取用户推广二维码
      */
-    public function getUserQr() {
-        $userId = (int) $this->request->get('uid', 100002);
-        if (!$userId) {
-            $this->error('uid缺失');
-        }
+    public static function getUserQr($userId) {
         $aUser = Db::name('users')->where(['id' => $userId])->find();
-        if (!$aUser) {
-            $this->error('出错了。。');
-        }
-        $aUserInfo = Db::name('user_open_binds')->where(['user_id' => $userId])->find();
-        $aUser = Db::name('users')->where(['id' => $userId])->find();
-        if ($aUserInfo['share_wx_app_qr_img']) {
-            //$this->success('获取二维码成功', null, ['img_url' => $aUserInfo['share_wx_app_qr_img']]);
+        if ($aUser['share_wx_app_qr_img']) {
+            return $aUser['share_wx_app_qr_img'];
         }
         $mini = new Qrcode(WxappConfig::getConfig());
         $tag = false;
@@ -197,7 +188,7 @@ class User extends BaseController {
             $savePath = UserService::getQrShareKey($userId) . '_' . NOW_TIME;
             $result = FileService::save($savePath, $content);
             if (isset($result['url']) && $result['url']) {
-                Db::name('user_open_binds')->where(['user_id' => $userId])->update([
+                Db::name('users')->where(['id' => $userId])->update([
                     'share_wx_app_qr_img' => $result['url'],
                     'updatetime' => NOW_TIME,
                 ]);
@@ -205,14 +196,14 @@ class User extends BaseController {
             $tag = true;
             $url = $result['url'];
         } catch (Exception $e) {
-            $this->error('error' . $e->getMessage());
+            return false;
         }
         if (!$tag) {
-            $this->error('发生未知错误');
+            return false;
         }
-        $this->success('获取生成二维码成功', null, ['img_url' => $url]);
+
+        return $url;
     }
-    
 
     /**
      * 获取我邀请的人
@@ -413,7 +404,7 @@ class User extends BaseController {
     }
     
     public function getShareImage(){        
-        $wishId = (int)$this->request->get('wish_id',10);
+        $wishId = (int)$this->request->get('wish_id',22);
         $aLastWish = Db::name('wish')->where(['id' => $wishId])->find();
         if(!$aLastWish){
             $this->error("梦想暂时不见了..");
@@ -439,11 +430,9 @@ class User extends BaseController {
         $date = date('Y.m.d',$aLastWish['create_time']);
         $tian = $aData['need_jianchi_day'].'/天';
         
-        $qrCode = new QrC();
-        $qrCode->setText('http://wish.xingyuanxingqiu.com')->setSize(110)->setPadding(8)->setImageType(QrC::IMAGE_TYPE_PNG);
+        $qrcodeImgUrl = static::getUserQr($aLastWish['uid']);
         
-        $qrcodeImg = $qrCode->getImage();
-		
+        $qrcodeImg = imagecreatefromstring(file_get_contents($qrcodeImgUrl));   
 		$bgImgUrl = APP_PATH.'/../bg3.png';
         $bigImg = imagecreatefrompng($bgImgUrl);
         
