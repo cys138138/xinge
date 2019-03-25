@@ -98,13 +98,6 @@ class Withdrawal extends BasicAdmin {
                     'opt_uid' => session('user.id'),
                     'status' => 2,
                 ]);
-
-                //设置解冻
-                Db::name('frozen')->where(['id' => $aWithdrawal['frozen_id']])->update([
-                    'status' => 3,
-                    'settlement_time' => $nowTime,
-                ]);
-
                 // 提交事务
                 Db::commit();
             } catch (Exception $e) {
@@ -141,14 +134,6 @@ class Withdrawal extends BasicAdmin {
                     'opt_uid' => session('user.id'),
                     'status' => 1,
                     'pay_time' => $nowTime,
-                ]);
-
-                //扣除余额
-                UserService::reduceUserMoney($aWithdrawal['uid'], $aWithdrawal['money'], 5, '提现');
-                //设置解冻完成
-                Db::name('frozen')->where(['id' => $aWithdrawal['frozen_id']])->update([
-                    'status' => 2,
-                    'settlement_time' => $nowTime,
                 ]);
                 Db::commit();
             } catch (Exception $e) {
