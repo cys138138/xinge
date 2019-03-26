@@ -81,6 +81,12 @@ class User extends BaseController {
         if (!$aUser) {
             $this->error('用户不存在');
         }
+	    $aWish = Db::name('wish')->where(['uid' => $aUser['id'], 'status' => 1])->find();
+	    $number = '';
+	if ($aWish) {
+		$number = $aWish['number'];	
+	}
+	   $aUser['number'] = $number; 
         unset($aUser['password']);
         $this->success('获取成功', null, $aUser);
     }
