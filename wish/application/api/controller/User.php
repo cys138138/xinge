@@ -86,7 +86,7 @@ class User extends BaseController {
 	if ($aWish) {
 		$number = $aWish['number'];	
 	}
-	   $aUser['number'] = $number; 
+	   $aUser['wish_numer'] = $number; 
         unset($aUser['password']);
         $this->success('获取成功', null, $aUser);
     }
