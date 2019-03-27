@@ -410,6 +410,29 @@ class User extends BaseController {
         $aData['need_jianchi_day'] = $aWishInfo['back_total_nums'];
         return $aData;
     }
+	
+	
+	public function calculateTextBox($text,$fontFile,$fontSize,$fontAngle) { 
+		/************ 
+		simple function that calculates the *exact* bounding box (single pixel precision). 
+		The function returns an associative array with these keys: 
+		left, top:  coordinates you will pass to imagettftext 
+		width, height: dimension of the image you have to create 
+		*************/ 
+		$rect = imagettfbbox($fontSize,$fontAngle,$fontFile,$text); 
+		$minX = min(array($rect[0],$rect[2],$rect[4],$rect[6])); 
+		$maxX = max(array($rect[0],$rect[2],$rect[4],$rect[6])); 
+		$minY = min(array($rect[1],$rect[3],$rect[5],$rect[7])); 
+		$maxY = max(array($rect[1],$rect[3],$rect[5],$rect[7])); 
+		
+		return array( 
+		 "left"   => abs($minX) - 1, 
+		 "top"    => abs($minY) - 1, 
+		 "width"  => $maxX - $minX, 
+		 "height" => $maxY - $minY, 
+		 "box"    => $rect 
+		); 
+} 
     
     public function getShareImage(){        
         $wishId = (int)$this->request->get('wish_id',22);
@@ -443,12 +466,16 @@ class User extends BaseController {
        $qrcodeImg = $this->imgzip($qrcodeImgUrl, 120, 120);
         
 //        $qrcodeImg = imagecreatefromstring(file_get_contents($qrcodeImgUrl));   
-		$bgImgUrl = APP_PATH.'/../bg3.png';
+		$bgImgUrl = APP_PATH.'/../bg4.png';
         $bigImg = imagecreatefrompng($bgImgUrl);
         
         $black = imagecolorallocate($bigImg, 250, 250, 255);//字体颜色
         $font = APP_PATH.'/../Arial.ttf';//字体路径
         $font2 = APP_PATH.'/../bista.ttf';//字体路径
+		
+		
+        
+		
         imagefttext($bigImg, 48, 0, 80, 340, $black, $font, $shengcuntianshu);
         imagefttext($bigImg, 48, 0, 300, 340, $black, $font, $qifurenshu);
         imagefttext($bigImg, 48, 0, 500, 340, $black, $font, $fudaishu);
@@ -458,6 +485,40 @@ class User extends BaseController {
         imagefttext($bigImg, 20, 0, 400, 806, $black2, $font2, $date);
         imagefttext($bigImg, 20, 0, 420, 843, $black2, $font2, $tian);
 		$imageSize = getimagesize($bgImgUrl);
+		
+		
+		$str = $aUser['username'];
+		if(mb_strlen($str) > 6){
+			$str= mb_substr($str,0,6,'utf-8').'..';
+		}		
+		$the_box = $this->calculateTextBox($str,$font2,22,0);
+		$x11 = ceil(($imageSize[0] - $the_box['width'])/2);//计算文字的水平位置
+
+		imagefttext($bigImg, 22 , 0, $x11, 140, $black, $font2,  $str);
+		
+		
+		$title = $aLastWish['title'] ? $aLastWish['title'] : '我有一个美丽的愿望，长大以后能播种太阳。播种一个，一个就够了。会结出许多的希望。f会结出许多的希望,会结出许多的希望';
+		$fontx = 14;
+		//分行
+		if(mb_strlen($title)>25){
+			$str1 = mb_substr($title,0,25,'utf-8');
+			$str2 = mb_substr($title,25,mb_strlen($title),'utf-8');
+			if(mb_strlen($title)>50){
+				$str2= mb_substr($title,25,15,'utf-8').'..';
+			}
+			$the_box2 = $this->calculateTextBox($str1,$font2,$fontx,0);
+			$x23 = ceil(($imageSize[0] - $the_box2['width'])/2);//计算文字的水平位置
+			imagefttext($bigImg, $fontx , 0, $x23, 200, $black, $font2,  $str1);
+
+			$the_box2 = $this->calculateTextBox($str2,$font2,$fontx,0);
+			$x23 = ceil(($imageSize[0] - $the_box2['width'])/2);//计算文字的水平位置
+			imagefttext($bigImg, $fontx , 0, $x23, 240, $black, $font2,  $str2);
+		}else{
+			$the_box2 = $this->calculateTextBox($title,$font2,$fontx,0);
+			$x23 = ceil(($imageSize[0] - $the_box2['width'])/2);//计算文字的水平位置
+			imagefttext($bigImg, $fontx , 0, $x23, 210, $black, $font2,  $title);
+		}
+		
 		$baseImg = imagecreatetruecolor($imageSize[0], $imageSize[1]); 
 		//2.上色 
 		$color=imagecolorallocate($baseImg,255,0,0); 
