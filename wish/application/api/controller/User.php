@@ -829,4 +829,25 @@ class User extends BaseController {
         return $this->success('ok');
     }
 
+	public function upload()
+    {
+        $files = $this->request->file();
+		if(empty($files)){
+			$this->error('文件为空');
+		}
+		$urs = [];
+		foreach($files as $file){
+			$names = str_split(md5(time()), 16);
+			$ext = strtolower(pathinfo($file->getInfo('name'), 4));
+			$ext = $ext ? $ext : 'tmp';
+			$filename = "{$names[0]}/{$names[1]}.{$ext}";
+			// 文件上传处理
+			if (($info = $file->move("static/upload/{$names[0]}", "{$names[1]}.{$ext}", true))) {
+				if (($site_url = \service\FileService::getFileUrl($filename, 'local'))) {
+					$urs[] = $site_url;
+				}
+			}
+		}
+		return $this->success('ok',null,$urs);
+    }
 }
