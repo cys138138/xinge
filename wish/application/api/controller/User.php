@@ -913,4 +913,14 @@ class User extends BaseController {
 		}
 		return $this->success('ok',null,$urs);
     }
+	
+	public function getQrImg(){
+		$uid = (int) $this->request->post('uid', 100001);
+		$aUserInfo = Db::name('users')->where(['id' => $uid])->find();
+        if (!$aUserInfo) {
+            $this->error('用户不存在');
+        }
+		$url = static::getUserQr($uid);
+		return $this->success('ok',null,['url'=>$url]);
+	}
 }
