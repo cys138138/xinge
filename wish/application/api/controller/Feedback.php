@@ -17,7 +17,7 @@ class Feedback extends BaseController {
     public function addFeedback() {
         $uid = (int) $this->request->post('uid', 0);
         $content = $this->request->post('content', '');
-        $bs64 = $this->request->post('bs_64_list', '');
+        $bs64 = $this->request->post('bs64', '');
         if(!$content){
             return $this->error('反馈内容为空');
         }
