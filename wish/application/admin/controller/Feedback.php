@@ -30,6 +30,7 @@ class Feedback extends \controller\BasicAdmin {
         }
         $db->field('app_feedback.*,ub.open_nickname');
         $db->leftJoin('user_open_binds ub','ub.user_id = app_feedback.uid');
+		$db->order('app_feedback.create_time desc');
         return parent::_list($db);
     }
 	
