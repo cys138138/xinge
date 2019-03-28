@@ -27,18 +27,11 @@ class Feedback extends BaseController {
         if ($feedback && (time() - $feedback['create_time']) < 120) {
             return $this->error('操作太频繁');
         }
-        $urlList = [];
-        if ($bs64 && !empty($bs64)) {
-            foreach ($bs64 as $content) {
-                $aInfo = \service\FileService::local(md5(time), $content);
-                $urlList[] = $aInfo['url'];
-            }
-        }
         Db::name('app_feedback')->insert([
             'create_time' => time(),
             'content' => $content,
             'uid' => $uid,
-            'attache' => join(',', $urlList),
+            'attache' => $bs64,
         ]);
         return $this->success('反馈成功');
     }
