@@ -40,7 +40,7 @@ class Feedback extends \controller\BasicAdmin {
     protected function _index_data_filter(&$data)
     {
         foreach ($data as &$vo) {
-            $vo['img_list'] = explode(',',$vo);
+            $vo['img_list'] = explode(',',$vo['attache']);
         }
     }
 
