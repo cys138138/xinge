@@ -51,6 +51,7 @@
            <th class='text-left'>编号</th>
             <th class='text-left'>用户ID</th>
             <th class='text-left'>内容</th>
+            <th class='text-left'>图片</th>
             <th class='text-left'>提交时间</th>
             
             <th class='text-center'>操作</th>
@@ -66,6 +67,11 @@
             <td class='text-left'>{$vo.id}</td>
             <td class='text-left'>{$vo.open_nickname}</td>
             <td class='text-left'>{$vo.content}</td>
+            <td class='text-left'>
+			{foreach $vo['img_list'] as $file}
+				<img src="{$file}" data-tips-image style="width:100px;"/>
+			{/foreach}
+			</td>
              <td class='text-left nowrap'>
                 {$vo.create_time|format_datetime|default="<span class='color-desc'>--</span>"|raw}
             </td>            

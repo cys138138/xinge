@@ -32,6 +32,17 @@ class Feedback extends \controller\BasicAdmin {
         $db->leftJoin('user_open_binds ub','ub.user_id = app_feedback.uid');
         return parent::_list($db);
     }
+	
+	/**
+     * 列表数据处理
+     * @param array $data
+     */
+    protected function _index_data_filter(&$data)
+    {
+        foreach ($data as &$vo) {
+            $vo['img_list'] = explode(',',$vo);
+        }
+    }
 
     /**
      * 删除
