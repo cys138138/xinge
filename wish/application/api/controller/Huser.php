@@ -30,13 +30,9 @@ class Huser extends BasicAdmin {
     public function getUserInfo($aUserI) {
 		if (!isset($aUserI['openid'])) {
             $this->error('解密数据出错了');
-        }
-		
+        }		
 		$aUserInfo = $aUserI['fansinfo'];
 		$aUserInfo['openid'] = $aUserI['openid'];
-        
-		echo '<pre>';
-		print_r($aUserInfo);
         //判断账号
         $openId = $aUserInfo['openid'];
         $mUser = Db::name('user_open_binds')->where(['openid' => $openId])->find();
@@ -121,7 +117,10 @@ class Huser extends BasicAdmin {
             ]);
             Db::name('user_open_binds')->where(['user_id' => $userId,'openid_type' => 'wxapp'])->update($aUserOpenBinds);
         }
-        $aUserInfo['userId'] = $userId;
-        $this->success('用户ok', null, $aUserInfo);
+        $aUserInfo['userId'] = $userId;		
+		cookie('h5_user_info', $aUserInfo);
+		echo '<pre>';
+		print_r(cookie('h5_user_info'));
+        //$this->success('用户ok', null, $aUserInfo);
     }
 }
