@@ -19,7 +19,7 @@ class Huser extends BasicAdmin {
      */
     public function oauth()
     {
-		$url = $this->request->get('cb','https://baidu.com');
+		$url = $this->request->get('cb',url("uinfo",'',true,true));
         $fans = WechatService::webOauth(1);
 		return $this->getUserInfo($fans,urldecode($url));     
     }
