@@ -3,6 +3,7 @@
 namespace app\api\controller;
 
 use think\Db;
+use service\WechatService;
 use controller\BasicAdmin;
 
 /**
