@@ -19,15 +19,16 @@ class Huser extends BasicAdmin {
      */
     public function oauth()
     {
+		$url = $this->request->get('cb','http://baidu.com');
         $fans = WechatService::webOauth(1);
-		return $this->getUserInfo($fans);     
+		return $this->getUserInfo($fans,urldecode($url));     
     }
 	
 	
 	/**
      * 用户登录
      */
-    public function getUserInfo($aUserI) {
+    public function getUserInfo($aUserI,$url) {
 		if (!isset($aUserI['openid'])) {
             $this->error('解密数据出错了');
         }		
@@ -126,9 +127,12 @@ class Huser extends BasicAdmin {
 		$aUserInfo['gender'] = $aUserInfo['sex'];
 		$aUserInfo['avatarUrl'] = $aUserInfo['headimgurl'];
 		$aUserInfo['sign'] = $aMainU['sign'] ? $aMainU['sign'] : '';
+		unset($aUserInfo['openid']);
+		unset($aUserInfo['nickname']);
+		unset($aUserInfo['unionid']);
+		unset($aUserInfo['sex']);
+		unset($aUserInfo['headimgurl']);
 		cookie('h5_user_info', $aUserInfo);
-		echo '<pre>';
-		print_r(cookie('h5_user_info'));
-        //$this->success('用户ok', null, $aUserInfo);
+		return $this->redirect($url);
     }
 }
