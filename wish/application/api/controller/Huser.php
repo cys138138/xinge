@@ -27,7 +27,7 @@ class Huser extends BasicAdmin {
 	public function uinfo(){
 		echo '<pre>';
 		echo '这里是跳转指定后的页面 cookie 中的 h5_user_info';
-		print_r(cookie('h5_user_info');
+		print_r(cookie('h5_user_info'));
 	}
 	
 	
