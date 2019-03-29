@@ -121,7 +121,7 @@ class User extends BaseController {
         $mUser = Db::name('user_open_binds')->where(['openid' => $openId])->find();
         $time = time();
         $userId = 0;
-
+		
         //用户信息表
         $aUserOpenBinds = [
             'open_nickname' => $aUserInfo['nickName'],
@@ -132,19 +132,44 @@ class User extends BaseController {
             'updatetime' => $time,
         ];
         //不存在则创建
-        if (!$mUser) {
-            //主表
-            $aMainUser = [
-                'status' => 1,
-                'username' => $aUserInfo['nickName'],
-                'head_img_url' => $aUserInfo['avatarUrl'],
-                'createtime' => $time,
-                'updatetime' => $time,
-            ];
-            if ($pid) {
-                $aMainUser['pid'] = $pid;
-            }
-            $userId = Db::name('users')->insertGetId($aMainUser);
+        if (!$mUser) {			
+			$unionId = isset($aUserInfo['unionId']) ? $aUserInfo['unionId'] : '';
+			//看看有没存在$unionId
+			if($unionId){
+				$aOneMain = Db::name('users')->where(['unionId'=>$unionId])->find();
+				if($aOneMain){
+					$userId = $aOneMain['id'];
+				}else{
+					//都不存在则创建
+					$aMainUser = [
+						'status' => 1,
+						'username' => $aUserInfo['nickName'],
+						'head_img_url' => $aUserInfo['avatarUrl'],
+						'createtime' => $time,
+						'updatetime' => $time,
+						'unionId'=> $unionId,
+					];
+					if ($pid) {
+						$aMainUser['pid'] = $pid;
+					}
+					$userId = Db::name('users')->insertGetId($aMainUser);
+				}
+			}else{
+				//都不存在则创建
+				$aMainUser = [
+					'status' => 1,
+					'username' => $aUserInfo['nickName'],
+					'head_img_url' => $aUserInfo['avatarUrl'],
+					'createtime' => $time,
+					'updatetime' => $time,
+					'unionId'=> $unionId,
+				];
+				if ($pid) {
+					$aMainUser['pid'] = $pid;
+				}
+				$userId = Db::name('users')->insertGetId($aMainUser);
+			}			
+            
             //用户信息表
             $aUserInfo = [
                 'sex' => $aUserInfo['gender'], //用户的性别，值为1时是男性，值为2时是女性，值为0时是未知
@@ -171,8 +196,9 @@ class User extends BaseController {
             $userId = $mUser['user_id'];
             Db::name('users')->where(['id' => $aMainU['id']])->update([
                 'head_img_url' => $aUserOpenBinds['open_head'],
+				'unionId'=>$aUserInfo['unionId'],
             ]);
-            Db::name('user_open_binds')->where(['user_id' => $userId])->update($aUserOpenBinds);
+            Db::name('user_open_binds')->where(['user_id' => $userId,'openid_type' => 'wxapp'])->update($aUserOpenBinds);
         }
         $aUserInfo['userId'] = $userId;
         $this->success('用户ok', null, $aUserInfo);
