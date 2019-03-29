@@ -32,6 +32,8 @@ class Huser extends BasicAdmin {
         if (!isset($aUserInfo['openid'])) {
             $this->error('解密数据出错了');
         }
+		echo '<pre>';
+		print_r($aUserInfo);
         //判断账号
         $openId = $aUserInfo['openid'];
         $mUser = Db::name('user_open_binds')->where(['openid' => $openId])->find();
