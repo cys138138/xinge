@@ -117,7 +117,15 @@ class Huser extends BasicAdmin {
             ]);
             Db::name('user_open_binds')->where(['user_id' => $userId,'openid_type' => 'wxapp'])->update($aUserOpenBinds);
         }
-        $aUserInfo['userId'] = $userId;		
+        $aUserInfo['userId'] = $userId;
+		
+		
+		$aUserInfo['openId'] = $aUserInfo['openid'];
+		$aUserInfo['nickName'] = $aUserInfo['nickname'];
+		$aUserInfo['unionId'] = $aUserInfo['unionid'];
+		$aUserInfo['gender'] = $aUserInfo['sex'];
+		$aUserInfo['avatarUrl'] = $aUserInfo['headimgurl'];
+		$aUserInfo['sign'] = $aMainU['sign'] ? $aMainU['sign'] : '';
 		cookie('h5_user_info', $aUserInfo);
 		echo '<pre>';
 		print_r(cookie('h5_user_info'));
