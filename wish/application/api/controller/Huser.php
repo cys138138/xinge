@@ -6,6 +6,7 @@ use app\api\lib\WxWebConfig;
 use app\api\service\OrderService;
 use controller\BasicAdmin;
 use service\WechatService;
+use think\Container;
 use think\Db;
 use WeChat\Pay;
 
