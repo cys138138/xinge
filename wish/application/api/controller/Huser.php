@@ -2,10 +2,12 @@
 
 namespace app\api\controller;
 
-use think\Db;
-use service\WechatService;
-use controller\BasicAdmin;
 use app\api\lib\WxWebConfig;
+use app\api\service\OrderService;
+use controller\BasicAdmin;
+use service\WechatService;
+use think\Db;
+use WeChat\Pay;
 
 /**
  * 艺人管理
