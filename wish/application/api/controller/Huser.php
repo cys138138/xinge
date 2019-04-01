@@ -140,7 +140,7 @@ class Huser extends BasicAdmin {
 		unset($aUserInfo['unionid']);
 		unset($aUserInfo['sex']);
 		unset($aUserInfo['headimgurl']);
-        setcookie('h5_user_info',  json_encode($aUserInfo),time()+ 60*60*30);
+        setcookie('h5_user_info',  json_encode($aUserInfo),time()+ 60*60*48);
 		cookie('h5_user_info1', $aUserInfo);
 		return $this->redirect($url);
     }
