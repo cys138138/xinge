@@ -105,7 +105,7 @@ class Huser extends BasicAdmin {
 				}
 				$userId = Db::name('users')->insertGetId($aMainUser);
 			}			
-            
+            $aUserInfo1 = $aUserInfo;
             //用户信息表
             $aUserInfo = [
                 'sex' => $aUserInfo['sex'], //用户的性别，值为1时是男性，值为2时是女性，值为0时是未知
@@ -123,6 +123,7 @@ class Huser extends BasicAdmin {
             Db::name('user_open_binds')->insert($aUserOpenBinds);
             $aUserInfo['mobile'] = '';
             $aUserInfo['sign'] = '';
+            $aUserInfo = array_merge($aUserInfo,$aUserInfo1);
         } else {
 
             $aMainU = Db::name('users')->find($mUser['user_id']);
