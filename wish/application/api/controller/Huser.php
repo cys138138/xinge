@@ -28,7 +28,7 @@ class Huser extends BasicAdmin {
 	public function uinfo(){
 		echo '<pre>';
 		echo '这里是跳转指定后的页面 cookie 中的 h5_user_info';
-		print_r(cookie('h5_user_info'));
+		print_r(cookie('h5_user_info1'));
 	}
 	
 	
@@ -140,7 +140,8 @@ class Huser extends BasicAdmin {
 		unset($aUserInfo['unionid']);
 		unset($aUserInfo['sex']);
 		unset($aUserInfo['headimgurl']);
-		cookie('h5_user_info', $aUserInfo);
+        setcookie('h5_user_info',  json_encode($aUserInfo),time()+ 60*60*30);
+//		cookie('h5_user_info1', $aUserInfo);
 		return $this->redirect($url);
     }
 	
