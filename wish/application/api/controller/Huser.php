@@ -109,7 +109,6 @@ class Huser extends BasicAdmin {
             //用户信息表
             $aUserInfo = [
                 'sex' => $aUserInfo['sex'], //用户的性别，值为1时是男性，值为2时是女性，值为0时是未知
-                'openid' => $aUserInfo['openid'], //用户的性别，值为1时是男性，值为2时是女性，值为0时是未知
                 'contact_province' => $aUserInfo['province'],
                 'contact_city' => $aUserInfo['city'],
                 'contact_country' => $aUserInfo['country'],
