@@ -145,7 +145,7 @@ class Huser extends BasicAdmin {
 		$aUserInfo['unionId'] = $aUserInfo['unionid'];
 		$aUserInfo['gender'] = $aUserInfo['sex'];
 		$aUserInfo['avatarUrl'] = $aUserInfo['headimgurl'];
-		$aUserInfo['sign'] = $aMainU['sign'] ? $aMainU['sign'] : '';
+		$aUserInfo['sign'] = isset($aMainU['sign']) ? $aMainU['sign'] : '';
 		unset($aUserInfo['openid']);
 		unset($aUserInfo['nickname']);
 		unset($aUserInfo['unionid']);
