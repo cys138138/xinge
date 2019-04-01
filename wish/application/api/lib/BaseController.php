@@ -16,13 +16,24 @@ use think\Controller;
 class BaseController extends Controller
 {
     protected $oPdd = null;
-    public function initialize(){
-		header('Access-Control-Allow-Origin:*');		
+    public function initialize(){	
         if($this->oPdd == null){
             $this->oPdd = new CpsPdd();
         }
     }
 
+	/**
+     * 构造方法
+     * BasicApi constructor.
+     */
+    public function __construct()
+    {
+        \service\ToolsService::corsOptionsHandler();
+		header("Access-Control-Allow-Origin:*");
+		header("Access-Control-Allow-Methods:*");
+		header("Access-Control-Allow-Credentials:true");
+        return parent::__construct();
+    }
 
     protected function getResponseType() {
         $config = Container::get('config');
