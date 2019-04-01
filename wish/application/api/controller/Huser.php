@@ -37,7 +37,8 @@ class Huser extends BasicAdmin {
     public function getUserInfo($aUserI,$url) {
 		if (!isset($aUserI['openid'])) {
             $this->error('解密数据出错了');
-        }		
+        }
+		$pid = (int) $this->request->post('pid', 0);		
 		$aUserInfo = $aUserI['fansinfo'];
 		$aUserInfo['openid'] = $aUserI['openid'];
         //判断账号
