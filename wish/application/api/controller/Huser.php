@@ -14,6 +14,12 @@ use WeChat\Pay;
  */
 class Huser extends BasicAdmin {
 
+    
+    protected function getResponseType() {
+        $config = Container::get('config');
+        return $config->get('default_ajax_return');
+    }
+    
    /**
      * 网页授权测试
      * @return string
