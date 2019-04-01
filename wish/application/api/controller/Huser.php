@@ -5,6 +5,7 @@ namespace app\api\controller;
 use think\Db;
 use service\WechatService;
 use controller\BasicAdmin;
+use app\api\lib\WxWebConfig;
 
 /**
  * 艺人管理
@@ -149,4 +150,44 @@ class Huser extends BasicAdmin {
         $data = WechatService::webJsSDK($url);
         $this->success('ok', null, $data);
     }
+	
+	/**
+     * 获取支付参数
+     */
+    public function getPaySign() {
+        $userId = (int) $this->request->post('uid', 0);
+        $wishId = (int) $this->request->post('wish_id', 0);
+        if (!$userId || !$wishId) {
+            return $this->error('ui 或者 wish_id为空');
+        }
+        $aLastWish = Db::name('wish')->where(['uid' => $userId, 'status' => 1, 'id' => $wishId])->find();
+        if (!$aLastWish) {
+            return $this->error('没有正在进行的愿望，请先创建。。');
+        }
+        //选择充值记录表id
+        $money = (double) $aLastWish['one_money'];
+        $aUserInfo = Db::name('user_open_binds')->where(['user_id' => $userId,'openid_type'=>'h5'])->find();
+        if (!$aUserInfo) {
+            return $this->error('找不到用户');
+        }
+        // 3. 创建接口实例
+        $wechat = new Pay(WxWebConfig::getConfig());
+
+        // 4. 组装参数，可以参考官方商户文档
+        $options = [
+            'body' => '稀有燃料',
+            'out_trade_no' => OrderService::createOrderSn($userId, $money, '购买私有燃料'),
+            'total_fee' => (int) ($money * 100), //金额转成分
+            'openid' => $aUserInfo['openid'],
+            'trade_type' => 'JSAPI',
+            'attach' => $wishId,
+            'notify_url' => url('@api/Notify/payCallback', '', true, true),
+                //'spbill_create_ip' => '127.0.0.1',
+        ];
+        //获取预支付码
+        $prepay = $wechat->createOrder($options);
+        $result = $wechat->createParamsForJsApi($prepay['prepay_id']);
+        return $this->success('获取成功', null, $result);
+    }
+	
 }

@@ -881,7 +881,7 @@ class User extends BaseController {
         }
         //选择充值记录表id
         $money = (double) $aLastWish['one_money'];
-        $aUserInfo = Db::name('user_open_binds')->where(['user_id' => $userId])->find();
+        $aUserInfo = Db::name('user_open_binds')->where(['user_id' => $userId,'openid_type'=>'wxapp'])->find();
         if (!$aUserInfo) {
             return $this->error('找不到用户');
         }
