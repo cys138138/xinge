@@ -17,6 +17,7 @@ class BaseController extends Controller
 {
     protected $oPdd = null;
     public function initialize(){
+		header('Access-Control-Allow-Origin:*');		
         if($this->oPdd == null){
             $this->oPdd = new CpsPdd();
         }
