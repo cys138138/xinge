@@ -48,7 +48,8 @@ class Huser extends BasicAdmin {
     public function getUserInfo($aUserI,$url,$pid) {
 		if (!isset($aUserI['openid'])) {
             $this->error('解密数据出错了');
-        }		
+        }
+        $openId = $aUserI['openid'];
 		$aUserInfo = $aUserI['fansinfo'];
 		$aUserInfo['openid'] = $aUserI['openid'];
         //判断账号
@@ -139,7 +140,7 @@ class Huser extends BasicAdmin {
         $aUserInfo['userId'] = $userId;
 		
 		
-		$aUserInfo['openId'] = $aUserInfo['openid'];
+		$aUserInfo['openId'] = $openId;
 		$aUserInfo['nickName'] = $aUserInfo['nickname'];
 		$aUserInfo['unionId'] = $aUserInfo['unionid'];
 		$aUserInfo['gender'] = $aUserInfo['sex'];
