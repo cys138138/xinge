@@ -30,8 +30,9 @@ class Huser extends BasicAdmin {
     public function oauth()
     {
 		$url = $this->request->get('cb',url("uinfo",'',true,true));
+		$pid = $this->request->get('pid',0);
         $fans = WechatService::webOauth(1);
-		return $this->getUserInfo($fans,urldecode($url));     
+		return $this->getUserInfo($fans,urldecode($url),$pid);     
     }
 	
 	public function uinfo(){
@@ -44,11 +45,10 @@ class Huser extends BasicAdmin {
 	/**
      * 用户登录
      */
-    public function getUserInfo($aUserI,$url) {
+    public function getUserInfo($aUserI,$url,$pid) {
 		if (!isset($aUserI['openid'])) {
             $this->error('解密数据出错了');
-        }
-		$pid = (int) $this->request->post('pid', 0);		
+        }		
 		$aUserInfo = $aUserI['fansinfo'];
 		$aUserInfo['openid'] = $aUserI['openid'];
         //判断账号
