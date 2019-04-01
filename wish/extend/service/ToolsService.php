@@ -18,8 +18,8 @@ class ToolsService
         if (request()->isOptions()) {
             header('Access-Control-Allow-Origin:*');
             header('Access-Control-Allow-Credentials:true');
-            header('Access-Control-Allow-Methods:GET,POST,OPTIONS');
-            header('Access-Control-Allow-Headers:Accept,Referer,Host,Keep-Alive,User-Agent,X-Requested-With,Cache-Control,Cookie');
+            header('Access-Control-Allow-Methods:*');
+            header('Access-Control-Allow-Headers:*');
             header('Content-Type:text/plain charset=UTF-8');
             header('Access-Control-Max-Age:1728000');
             header('HTTP/1.0 204 No Content');
