@@ -141,4 +141,11 @@ class Huser extends BasicAdmin {
 		cookie('h5_user_info', $aUserInfo);
 		return $this->redirect($url);
     }
+	
+	
+    public function getWxSign() {
+        $url = $this->request->post('url', url('/index/index/index', null, true, true));
+        $data = WechatService::webJsSDK($url);
+        $this->success('ok', null, $data);
+    }
 }
