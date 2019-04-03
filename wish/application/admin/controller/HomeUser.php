@@ -25,7 +25,7 @@ class HomeUser extends BasicAdmin {
         $this->title = '列表';
         list($get, $db) = [$this->request->get(), Db::name($this->table)];
         (isset($get["mobile"]) && $get["mobile"] !== '') && $db->whereLike("user.mobile", "%{$get["mobile"]}%");
-        (isset($get["uname"]) && $get["uname"] !== '') && $db->whereLike("ub.open_nickname", "%{$get["uname"]}%");
+        (isset($get["uname"]) && $get["uname"] !== '') && $db->whereLike("user.username", "%{$get["uname"]}%");
         
         (isset($get["money"]) && $get["money"] !== '') && $db->whereLike("user.money", "%{$get["money"]}%");
         (isset($get["status"]) && $get["status"] !== '') && $db->where(['user.status'=>(int)$get["status"]]);
@@ -37,8 +37,7 @@ class HomeUser extends BasicAdmin {
         }
         
         $db->alias('user');
-        $db->field('user.*,ub.open_nickname,uinfo.id_no,uinfo.id_true_name');
-        $db->leftJoin('user_open_binds ub', 'ub.user_id = user.id');
+        $db->field('user.*,user.username as open_nickname,uinfo.id_no,uinfo.id_true_name');
         $db->leftJoin('user_infos uinfo', 'uinfo.user_id = user.id');
         $db->order('user.createtime desc');
         
