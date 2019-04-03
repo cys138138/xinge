@@ -34,7 +34,7 @@ class Withdrawal extends BasicAdmin {
     
     protected function getSearch($status=''){
          list($get, $db) = [$this->request->get(), Db::name($this->table)];
-        (isset($get["uname"]) && $get["uname"] !== '') && $db->whereLike("ub.username", "%{$get["uname"]}%");
+        (isset($get["uid"]) && $get["uid"] !== '') && $db->whereLike("ub.username", "%{$get["uname"]}%");
         (isset($get["suname"]) && $get["suname"] !== '') && $db->whereLike("su.username", "%{$get["suname"]}%");
         if ($status !== '') {
             $db->where(["app_withdrawal.status" => $status]);
