@@ -23,13 +23,13 @@ class Feedback extends \controller\BasicAdmin {
         $this->title = '列表';
 
         list($get, $db) = [$this->request->get(), Db::name($this->table)];
-        (isset($get["uname"]) && $get["uname"] !== '') && $db->whereLike("ub.open_nickname", "%{$get["uname"]}%");
+        (isset($get["uname"]) && $get["uname"] !== '') && $db->whereLike("ub.username", "%{$get["uname"]}%");
         if (isset($get['create_time']) && $get['create_time'] !== '') {
             list($start, $end) = explode(' - ', $get['create_time']);
             $db->whereBetween('create_time', [strtotime($start), strtotime($end)]);
         }
-        $db->field('app_feedback.*,ub.open_nickname');
-        $db->leftJoin('user_open_binds ub','ub.user_id = app_feedback.uid');
+        $db->field('app_feedback.*,ub.username as open_nickname');
+        $db->leftJoin('users ub','ub.id = app_feedback.uid');
 		$db->order('app_feedback.create_time desc');
         return parent::_list($db);
     }
