@@ -37,8 +37,7 @@ class HomeUser extends BasicAdmin {
         }
         
         $db->alias('user');
-        $db->field('user.*,user.username as open_nickname,uinfo.id_no,uinfo.id_true_name');
-        $db->leftJoin('user_infos uinfo', 'uinfo.user_id = user.id');
+        $db->field('user.*,user.username as open_nickname');
         $db->order('user.createtime desc');
         
         return parent::_list($db);
