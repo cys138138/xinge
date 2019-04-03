@@ -34,7 +34,7 @@ class Withdrawal extends BasicAdmin {
     
     protected function getSearch($status=''){
          list($get, $db) = [$this->request->get(), Db::name($this->table)];
-        (isset($get["uname"]) && $get["uname"] !== '') && $db->whereLike("ub.open_nickname", "%{$get["uname"]}%");
+        (isset($get["uname"]) && $get["uname"] !== '') && $db->whereLike("ub.username", "%{$get["uname"]}%");
         (isset($get["suname"]) && $get["suname"] !== '') && $db->whereLike("su.username", "%{$get["suname"]}%");
         if ($status !== '') {
             $db->where(["app_withdrawal.status" => $status]);
@@ -51,8 +51,8 @@ class Withdrawal extends BasicAdmin {
             list($start, $end) = explode(' - ', $get['opt_time']);
             $db->whereBetween('app_withdrawal.opt_time', [strtotime($start), strtotime($end)]);
         }
-        $db->field('app_withdrawal.*,ub.open_nickname,su.username as suname');
-        $db->leftJoin('user_open_binds ub', 'ub.user_id = app_withdrawal.uid');
+        $db->field('app_withdrawal.*,ub.username as open_nickname,su.username as suname');
+        $db->leftJoin('users ub', 'ub.id = app_withdrawal.uid');
         $db->leftJoin('system_user su', 'su.id = app_withdrawal.opt_uid');
         $db->order('create_time desc');
         return $db;
