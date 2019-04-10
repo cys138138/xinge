@@ -54,7 +54,6 @@ class Wish extends BaseController {
             'create_date' => date('Y-m-d'),
             'wish_id' => $wishId,
             'content' => $content,
-            'uid' => $uid,
             'attache' => $bs64,
         ]);
         return $this->success('记录成功');
@@ -72,14 +71,13 @@ class Wish extends BaseController {
             return $this->error('内容为空');
         }
 
-        $feedback = Db::name('wish_log')->where(['id'=>$id,'uid'=>$uid])->find();
+        $feedback = Db::name('wish_log')->where(['id'=>$id])->find();
 		if(!$feedback){
 			return $this->error('非法参数');
 		}
         Db::name('wish_log')->where(['id'=>$id])->update([
             'update_time' => time(),
             'content' => $content,
-            'uid' => $uid,
             'attache' => $bs64,
         ]);
         return $this->success('修改成功');
