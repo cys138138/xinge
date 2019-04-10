@@ -37,8 +37,8 @@ class Wish extends BaseController {
      * 添加星愿记录
      */
     public function addWishLog() {
-        $uid = (int) $this->request->post('uid', 100002);
-        $wishId = $this->request->post('wish_id', 74);
+        $uid = (int) $this->request->post('uid', 0);
+        $wishId = $this->request->post('wish_id', 0);
         $content = $this->request->post('content', '测试');
         $bs64 = $this->request->post('bs64', '');
         if(!$content){
@@ -63,8 +63,8 @@ class Wish extends BaseController {
      * 添加星愿记录
      */
     public function editorWishLog() {
-        $uid = (int) $this->request->post('uid', 100002);
-        $id = $this->request->post('id', 1);
+        $uid = (int) $this->request->post('uid', 0);
+        $id = $this->request->post('id', 0);
         $content = $this->request->post('content', '测试');
         $bs64 = $this->request->post('bs64', '');
         if(!$content){
@@ -87,7 +87,7 @@ class Wish extends BaseController {
      * 获取星愿记录
      */
     public function getWishLogList() {
-        $wishId = $this->request->post('wish_id', 74);
+        $wishId = $this->request->post('wish_id', 0);
         $feedback = Db::name('wish_log')->where(['wish_id'=>$wishId])->order("create_time desc")->select();
 		if(!$feedback){
 			return $this->success('获取成功',null,[]);
