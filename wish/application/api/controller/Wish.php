@@ -33,4 +33,67 @@ class Wish extends BaseController {
         $this->success('获取成功 星球星愿列表', '', $aWishList);
     }
 
+	/**
+     * 添加星愿记录
+     */
+    public function addWishLog() {
+        $uid = (int) $this->request->post('uid', 0);
+        $wishId = $this->request->post('wish_id', '9');
+        $content = $this->request->post('content', '测试');
+        $bs64 = $this->request->post('bs64', '');
+        if(!$content){
+            return $this->error('内容为空');
+        }
+
+        $feedback = Db::name('wish')->where(['uid' => $uid,'id'=>$wishId])->find();
+		if(!$feedback){
+			return $this->error('非法参数');
+		}
+        Db::name('wish_log')->insert([
+            'create_time' => time(),
+            'create_date' => date('Y-m-d'),
+            'wish_id' => $wishId,
+            'content' => $content,
+            'uid' => $uid,
+            'attache' => $bs64,
+        ]);
+        return $this->success('记录成功');
+    }
+	
+	/**
+     * 添加星愿记录
+     */
+    public function editorWishLog() {
+        $uid = (int) $this->request->post('uid', 0);
+        $id = $this->request->post('id', 1);
+        $content = $this->request->post('content', '测试');
+        $bs64 = $this->request->post('bs64', '');
+        if(!$content){
+            return $this->error('内容为空');
+        }
+
+        $feedback = Db::name('wish_log')->where(['id'=>$id])->find();
+		if(!$feedback){
+			return $this->error('非法参数');
+		}
+        Db::name('wish_log')->where(['id'=>$id])->update([
+            'update_time' => time(),
+            'content' => $content,
+            'uid' => $uid,
+            'attache' => $bs64,
+        ]);
+        return $this->success('记录成功');
+    }
+	
+	/**
+     * 获取星愿记录
+     */
+    public function getWishLogList() {
+        $wishId = $this->request->post('wish_id', '9');
+        $feedback = Db::name('wish_log')->where(['wish_id'=>$wishId])->order("create_time desc")->select();
+		if(!$feedback){
+			return $this->success('记录成功',null,[]);
+		}
+        return $this->success('记录成功',null,$feedback);
+    }
 }
