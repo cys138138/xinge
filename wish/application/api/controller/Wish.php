@@ -97,6 +97,6 @@ class Wish extends BaseController {
 			'list'=>$feedback,
 			'days'=>$days,
 		];
-        return $this->success('获取成功 days 坚持了多少天',null,$feedback);
+        return $this->success('获取成功 days 坚持了多少天',null,$result);
     }
 }
