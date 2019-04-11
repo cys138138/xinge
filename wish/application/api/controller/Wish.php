@@ -87,11 +87,16 @@ class Wish extends BaseController {
      * 获取星愿记录
      */
     public function getWishLogList() {
-        $wishId = $this->request->post('wish_id', 0);
+        $wishId = $this->request->post('wish_id', 74);
         $feedback = Db::name('wish_log')->where(['wish_id'=>$wishId])->order("create_time desc")->select();
+		$days = Db::name('wish_log')->where(['wish_id'=>$wishId])->group("create_date")->count();
 		if(!$feedback){
 			return $this->success('获取成功',null,[]);
 		}
-        return $this->success('获取成功',null,$feedback);
+		$result = [
+			'list'=>$feedback,
+			'days'=>$days,
+		];
+        return $this->success('获取成功 days 坚持了多少天',null,$feedback);
     }
 }
