@@ -83,7 +83,9 @@ class UserService {
                 $aData['today_need_money'] = intval($aWish['one_money']);
             }
             $aData['back_total_nums'] = intval($needMoney / $aWish['one_money']) * 30;
-        }
+        }        
+        $aData['record_days'] = Db::name('wish_log')->where(['wish_id'=>$id])->group("create_date")->count();
+        $aData['back_total_nums'] = $aWish['target_day'] - $aData['record_days'];
         return $aData;
     }
 

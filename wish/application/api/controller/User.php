@@ -354,7 +354,7 @@ class User extends BaseController {
      * one_money 如果 target_type 是1 则这里是每天需要存的金额 target_type 是 2  则这里是每周需要存的金额 target_type 是3  则这里是每月需要存的金额 
      * @return type
      */
-    public function createWish() {
+    public function createWishbak() {
         $userId = (int) $this->request->post('uid', 4);
         $title = $this->request->post('title', '去玩');
         $target_money = (int) $this->request->post('target_money', 88);
@@ -397,6 +397,44 @@ class User extends BaseController {
         if ($id = Db::name('wish')->insertGetId($aData)) {
             $aData = UserService::getWishNeedMoneyInfo($id);
             $this->success('创建成功 ：total_day_nums 已经生存天数 total_nums 总共存了多少桶 today_need_money 今天需要存的桶数 back_total_nums 还需要几天返回', '', $aData);
+        }
+        return $this->error('出错了重试。。');
+    }
+    
+    /**
+     * uid 用户id
+     * title 愿望标题
+     * target_money 愿望目标金额
+     * target_type 愿望时间类型 1 按天 2按周 3 按月
+     * one_money 如果 target_type 是1 则这里是每天需要存的金额 target_type 是 2  则这里是每周需要存的金额 target_type 是3  则这里是每月需要存的金额 
+     * @return type
+     */
+    public function createWish() {
+        $userId = (int) $this->request->post('uid', 100002);
+        $title = $this->request->post('title', '去北京');
+        $targetDay = (int) $this->request->post('target_day', 5);
+        if (!$title) {
+            return $this->error('愿望名称必填');
+        }
+        if (!$targetDay) {
+            return $this->error('愿望目标必填');
+        }
+        $aWish = Db::name('wish')->where(['uid' => $userId, 'status' => 1])->find();
+        if ($aWish) {
+            return $this->error('还有未完成的愿望呢！请先完成');
+        }
+
+        $aData = [
+            'uid' => $userId,
+            'title' => $title,
+            'create_time' => NOW_TIME,
+            'status' => 1,
+            'target_day' => $targetDay,
+            'number' => date('mHi') . mt_rand(1000, 9999),
+        ];
+        if ($id = Db::name('wish')->insertGetId($aData)) {
+            $aData = UserService::getWishNeedMoneyInfo($id);
+            $this->success('创建成功 ：record_days 成功记录天数 back_total_nums 还有多少天返回', '', $aData);
         }
         return $this->error('出错了重试。。');
     }
