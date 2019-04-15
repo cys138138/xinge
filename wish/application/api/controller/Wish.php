@@ -83,6 +83,36 @@ class Wish extends BaseController {
         return $this->success('修改成功');
     }
 	
+	
+	/**
+     * 删除记录
+     */
+    public function editorWishLog() {
+        $uid = (int) $this->request->post('uid', 0);
+        $id = $this->request->post('id', 0);
+
+        $feedback = Db::name('wish_log')->where(['id'=>$id])->find();
+		if(!$feedback){
+			return $this->error('非法参数');
+		}
+        Db::name('wish_log')->where(['id'=>$id])->delete();
+        return $this->success('删除成功');
+    }
+	
+	/**
+     * 获取详情记录
+     */
+    public function getWishLog() {
+        $uid = (int) $this->request->post('uid', 0);
+        $id = $this->request->post('id', 0);
+
+        $feedback = Db::name('wish_log')->where(['id'=>$id])->find();
+		if(!$feedback){
+			return $this->error('非法参数');
+		}
+        return $this->success('删除成功',null,$feedback);
+    }
+	
 	/**
      * 获取星愿记录
      */
