@@ -412,7 +412,7 @@ class User extends BaseController {
     public function createWish() {
         $userId = (int) $this->request->post('uid', 100002);
         $title = $this->request->post('title', '去北京');
-        $targetDay = (int) $this->request->post('target_day', 5);
+        $targetDay = (int) $this->request->post('one_money', 5);
         if (!$title) {
             return $this->error('愿望名称必填');
         }
