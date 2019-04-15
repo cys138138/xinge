@@ -336,7 +336,7 @@ class User extends BaseController {
         }
         //计算
         $target_money = $aWish['target_day'];
-        $okMoney = Db::name('wish_log')->where(['wish_id'=>$id])->group("create_date")->count();
+        $okMoney = Db::name('wish_log')->where(['wish_id'=>$aWish['id']])->group("create_date")->count();
         if (($target_money - $okMoney) <= 0) {
             return $this->error('愿望实现，开启新的愿望吧');
         }
