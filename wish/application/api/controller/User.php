@@ -338,7 +338,7 @@ class User extends BaseController {
         $target_money = $aWish['target_day'];
         $okMoney = Db::name('wish_log')->where(['wish_id'=>$aWish['id']])->group("create_date")->count();
         if (($target_money - $okMoney) <= 0) {
-            return $this->error('愿望实现，开启新的愿望吧');
+            Db::name('wish_log')->where(['wish_id'=>$aWish['id']])->update(['status'=>2,'finish_time'=>NOW_TIME]);
         }
         $aData = UserService::getWishNeedMoneyInfo($aWish['id']);
 		$aData['wish_id'] = $aWish['id'];
