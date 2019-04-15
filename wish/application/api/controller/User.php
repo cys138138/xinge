@@ -335,9 +335,9 @@ class User extends BaseController {
             return $this->error('愿望不存在，请先创建愿望');
         }
         //计算
-        $target_money = $aWish['target_money'];
-        $okMoney = UserService::getWishTotalMoney($aWish['id']);
-        if ($target_money <= $okMoney) {
+        $target_money = $aWish['target_day'];
+        $okMoney = Db::name('wish_log')->where(['wish_id'=>$id])->group("create_date")->count();
+        if (($target_money - $okMoney) <= 0) {
             return $this->error('愿望实现，开启新的愿望吧');
         }
         $aData = UserService::getWishNeedMoneyInfo($aWish['id']);
