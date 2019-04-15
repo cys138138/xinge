@@ -83,11 +83,10 @@ class Wish extends BaseController {
         return $this->success('修改成功');
     }
 	
-	
 	/**
      * 删除记录
      */
-    public function editorWishLog() {
+    public function delWishLog() {
         $uid = (int) $this->request->post('uid', 0);
         $id = $this->request->post('id', 0);
 
