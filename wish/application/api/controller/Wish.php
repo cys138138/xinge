@@ -122,6 +122,9 @@ class Wish extends BaseController {
 		if(!$feedback){
 			return $this->success('获取成功',null,[]);
 		}
+        foreach($feedback as &$v){
+            $v['attache'] = explode(',', $v['attache']);
+        }
 		$result = [
 			'list'=>$feedback,
 			'days'=>$days,
